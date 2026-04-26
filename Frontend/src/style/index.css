@@ -1,1 +1,65 @@
-@import "tailwindcss"; 
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+  
+
+.navbar {
+    will-change: transform, opacity;
+  }
+  .contact-bg-glow {
+    will-change: filter;
+  }
+
+@layer base {
+    html.lenis {
+        height: auto;
+    }
+
+    .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+        overflow: hidden;
+    }
+
+    /* Hide scrollbar for a truly 'Small UI' clean look, or style it: */
+    ::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-indigo-500);
+        border-radius: 10px;
+    }
+}
+
+
+@theme {
+
+    /* Define the Wave Keyframes */
+    @keyframes wave {
+        0% {
+            transform: translate3d(90px, 0, 0);
+        }
+
+        100% {
+            transform: translate3d(-85px, 0, 0);
+        }
+    }
+
+    /* Define the Animation Utilities */
+    --animate-wave-slow: wave 30s cubic-bezier(.55, .5, .45, .5) infinite;
+    --animate-wave-med: wave 15s cubic-bezier(.55, .5, .45, .5) infinite;
+    --animate-wave-fast: wave 5s cubic-bezier(.55, .5, .45, .5) infinite;
+}
