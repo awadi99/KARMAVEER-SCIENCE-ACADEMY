@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import faqData from '../../constants/FaQData';
+import faqData from '../../constants/FaqData';
 import { Plus, Minus } from 'lucide-react';
 
 // Memoized individual item to prevent re-rendering the whole list 
