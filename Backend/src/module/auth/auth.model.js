@@ -1,0 +1,66 @@
+import mongoose from "mongoose";
+
+const authSchema = new mongoose.Schema(
+    {
+        erpId: {
+            type: String,
+            required: function () {
+                return !this.isGoogleUser;
+            },
+            unique: true,
+            sparse: true,
+            trim: true,
+            minLength: 3,
+            maxLength: 30,
+        },
+
+        fullName: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            trim: true,
+            match: [
+                /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                "Please enter a valid email",
+            ],
+        },
+
+
+        password: {
+            type: String,
+            required: function () {
+                return !this.isGoogleUser;
+            },
+            minLength: 8,
+            match: [
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                "Password must contain uppercase, lowercase, number and special character",
+            ],
+            select: false,
+        },
+
+
+        isGoogleUser: {
+            type: Boolean,
+            default: false,
+        },
+
+        profilePic: {
+            type: String,
+            default: "",
+        },
+
+    },
+    { timestamps: true }
+);
+
+const User = mongoose.model("newUser", authSchema);
+
+export default User;
