@@ -4,12 +4,24 @@ import { Heart, Shield, Sparkles } from 'lucide-react';
 
 export default function AboutUs() {
     return (
-        /* Background remains the same Deep Dark color */
-        <section id="about" className="py-32 px-6 bg-white dark:bg-[#0F172A] relative overflow-hidden transition-colors duration-500 contain-paint">
+        <section 
+            id="about" 
+            /* - isolate: Prevents backdrop-filters (like a blurred navbar) from recalculating this entire section.
+               - content-visibility: auto: Tells the browser to only render this when it's near the viewport.
+            */
+            className="py-32 px-6 bg-white dark:bg-[#0F172A] relative overflow-hidden transition-colors duration-500 isolate"
+            style={{ contain: 'content', contentVisibility: 'auto' }}
+        >
 
-            {/* BACKGROUND GLOWS: Changed to Amber/Gold */}
-            <div className="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-amber-500/5 dark:from-amber-400/5 to-transparent pointer-events-none transform-gpu" />
-            <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-slate-200/5 dark:from-slate-800/10 to-transparent pointer-events-none transform-gpu" />
+            {/* BACKGROUND GLOWS: Forced to GPU layer with backface-visibility to stop flickering */}
+            <div 
+                className="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-amber-500/5 dark:from-amber-400/5 to-transparent pointer-events-none transform-gpu opacity-50" 
+                style={{ backfaceVisibility: 'hidden', willChange: 'transform' }}
+            />
+            <div 
+                className="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-slate-200/5 dark:from-slate-800/10 to-transparent pointer-events-none transform-gpu opacity-50" 
+                style={{ backfaceVisibility: 'hidden', willChange: 'transform' }}
+            />
 
             <div className="max-w-6xl mx-auto relative z-10">
 
@@ -18,8 +30,9 @@ export default function AboutUs() {
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                         viewport={{ once: true, margin: "-50px" }}
-                        className="flex flex-col items-start gap-2"
+                        className="flex flex-col items-start gap-2 transform-gpu"
                     >
                         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 mb-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
@@ -34,27 +47,30 @@ export default function AboutUs() {
                 <div className="flex flex-col lg:flex-row gap-20 items-center">
 
                     {/* LEFT: THE VISUAL STACK */}
-                    <div className="w-full lg:w-1/2 relative will-change-transform transform-gpu">
+                    <div className="w-full lg:w-1/2 relative transform-gpu">
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
+                            initial={{ opacity: 0, scale: 0.98 }} // Slightly less aggressive scale for performance
                             whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5 }}
                             viewport={{ once: true }}
-                            className="relative z-10 rounded-[3rem] overflow-hidden border-[12px] border-slate-50 dark:border-[#1E293B] shadow-2xl shadow-amber-900/10 contain-layout"
+                            className="relative z-10 rounded-[3rem] overflow-hidden border-[12px] border-slate-50 dark:border-[#1E293B] shadow-2xl shadow-amber-900/10 isolate transform-gpu"
                         >
                             <img
                                 src="/image/hero_bg.jpg"
                                 alt="KSA Journey"
-                                className="w-full h-[550px] object-cover transition-transform duration-700 ease-out hover:scale-105 transform-gpu"
+                                loading="lazy" // Prevents image decoding from blocking the main thread
+                                className="w-full h-[550px] object-cover transition-transform duration-700 ease-out hover:scale-105 transform-gpu will-change-transform"
                             />
                         </motion.div>
 
                         {/* OVERLAPPING STAT CARD */}
                         <motion.div
-                            initial={{ x: 30, opacity: 0 }}
+                            initial={{ x: 20, opacity: 0 }}
                             whileInView={{ x: 0, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
+                            transition={{ delay: 0.2, duration: 0.4 }}
                             viewport={{ once: true }}
-                            className="absolute -bottom-8 -right-4 md:right-8 z-20 p-8 rounded-[2.5rem] bg-white/95 dark:bg-[#1E293B]/95 border border-slate-100 dark:border-amber-500/30 shadow-2xl transform-gpu"
+                            className="absolute -bottom-8 -right-4 md:right-8 z-20 p-8 rounded-[2.5rem] bg-white/95 dark:bg-[#1E293B]/95 border border-slate-100 dark:border-amber-500/30 shadow-2xl transform-gpu isolate"
+                            style={{ backfaceVisibility: 'hidden' }}
                         >
                             <div className="flex items-center gap-6">
                                 <div className="text-center">
@@ -75,7 +91,9 @@ export default function AboutUs() {
                         <motion.div
                             initial={{ opacity: 0, y: 15 }}
                             whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4 }}
                             viewport={{ once: true }}
+                            className="transform-gpu"
                         >
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 mb-6">
                                 <Sparkles size={14} className="text-amber-600" />
@@ -89,13 +107,13 @@ export default function AboutUs() {
                                 </span>
                             </h2>
 
-                            <p className="text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed border-l-4 border-amber-500 pl-6 mb-8">
+                            <p className="text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed border-l-4 border-amber-500 pl-6 mb-8 transform-gpu">
                                 Academic excellence is our foundation, but character is our goal. We instill the discipline and respect required for students to become focused, responsible leaders.
                             </p>
                         </motion.div>
 
                         {/* PHILOSOPHY BOXES */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 transform-gpu">
                             <div className="p-6 rounded-[2rem] bg-slate-50 dark:bg-[#1E293B] border border-slate-100 dark:border-amber-500/20 transition-transform duration-300 hover:-translate-y-1 transform-gpu">
                                 <Shield className="text-amber-500 mb-4" size={24} />
                                 <h4 className="text-lg font-bold dark:text-white mb-1 uppercase tracking-tight">Discipline</h4>
