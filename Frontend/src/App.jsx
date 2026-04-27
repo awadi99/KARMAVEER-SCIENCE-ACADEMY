@@ -7,6 +7,7 @@ import Login from './page/Login';
 import MainLayout from './layouts/MainLayout';
 import Dashboard from './page/Dashboard';
 import Student from './page/Student';
+import ForgotPassword from './page/ForgotPassword';
 
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
             <Route path='/' element={<LandingPage isDark={isDark} setIsDark={setIsDark} />} />
             <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/forgot-password' element={<ForgotPassword/>}/>
 
             {/* Pass the state to the Dashboard Layout */}
             <Route path="/dashboard" element={<MainLayout isDark={isDark} setIsDark={setIsDark} />}>
