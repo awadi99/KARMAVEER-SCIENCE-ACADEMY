@@ -15,8 +15,8 @@ const signupSchema = z.object({
 
     erpId:z
     .string()
-    .min(3  ,"Username must be at least 3 characters")
-    .max(5 ,"Username too long")
+    .min(3  ,"ErpId must be at least 3 characters")
+    .max(5 ,"ErpId too long")
     .regex(usernameRegex, "Only letters, numbers, underscore")
     .trim(),
 

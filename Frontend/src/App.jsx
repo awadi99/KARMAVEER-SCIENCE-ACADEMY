@@ -4,6 +4,7 @@ import LandingPage from './page/LandingPage'
 import SmoothScroll from './components/scroll/SmoothScroll';
 import Register from './page/Register';
 import Login from './page/Login';
+import ForgotPassword from './page/ForgotPassword';
 
 export default function App() {
   const [isDark, setIsDark] = useState(true);
@@ -17,6 +18,7 @@ export default function App() {
 
           <Route path='/register' element={<Register/>}/>
           <Route path='/login' element={<Login/>}/>
+          <Route path='/forgot-password' element ={<ForgotPassword/>}/>
 
 
 

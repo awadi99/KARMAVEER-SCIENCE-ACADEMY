@@ -12,7 +12,7 @@ const SOCIAL_LINKS = [
   { Icon: FiGithub, href: "#" }
 ];
 
-const EXPLORE_LINKS = ['Home', 'Dashboard', 'Problems', 'Leaderboard'];
+const EXPLORE_LINKS = ['Home', 'Dashboard', 'Online Test'];
 
 export default function Footer() {
     return (
