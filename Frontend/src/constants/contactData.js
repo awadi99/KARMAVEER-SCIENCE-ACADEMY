@@ -4,8 +4,8 @@ import { Phone, Mail, Clock, MapPin } from 'lucide-react';
 export const CONTACT_CONFIG = {
     header: {
         badge: "Official Contact",
-        title: "Start Your",
-        titleAccent: "Success Story."
+        title: "Contact",
+        titleAccent: "Us."
     },
 
     contacts: [

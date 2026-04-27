@@ -64,21 +64,21 @@ export default function Navbar({ isDark, setIsDark }) {
                 className={`
                     max-w-5xl mx-auto pointer-events-auto flex items-center justify-between px-2 py-2 rounded-2xl border transition-all duration-700
                     ${scrolled
-                        ? "bg-white/70 dark:bg-black/60 backdrop-blur-2xl border-slate-200 dark:border-violet-500/30 shadow-xl"
+                        ? "bg-white/90 dark:bg-[#0A1128]/80 backdrop-blur-2xl border-slate-200 dark:border-amber-500/20 shadow-xl"
                         : "bg-transparent border-transparent"
                     }
                 `}
             >
                 {/* BRAND LOGO */}
                 <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4">
-                    <div className="h-9 w-9 bg-indigo-600 dark:bg-violet-600 rounded-xl flex items-center justify-center shadow-lg transition-transform hover:rotate-12">
+                    <div className="h-9 w-9 bg-[#0A1128] dark:bg-amber-500 rounded-xl flex items-center justify-center shadow-lg transition-transform hover:rotate-12">
                         <img src="/image/logo.jpeg" className="text-white rounded-full h-7 w-7" alt="Logo" />
                     </div>
                     <div className="flex flex-col leading-none">
                         <span className="font-black tracking-tighter text-slate-900 dark:text-white uppercase text-2xl md:text-2xl">
-                            KSA<span className="text-2xl text-purple-600 "> .</span>
+                            KSA<span className="text-2xl text-amber-500 "> .</span>
                         </span>
-                        <span className="text-[10px] font-bold tracking-[0.2em] text-indigo-600 dark:text-violet-500 uppercase">
+                        <span className="text-[10px] font-bold tracking-[0.2em] text-[#0A1128] dark:text-amber-500 uppercase">
                             Academy
                         </span>
                     </div>
@@ -91,7 +91,7 @@ export default function Navbar({ isDark, setIsDark }) {
                             key={item.name}
                             href={item.href}
                             onClick={(e) => handleScrollTo(e, item.href)}
-                            className="px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-violet-300 transition-all rounded-xl hover:bg-white/50 dark:hover:bg-violet-900/20"
+                            className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:text-[#0A1128] dark:hover:text-amber-400 transition-all rounded-xl hover:bg-slate-100 dark:hover:bg-amber-500/10"
                         >
                             {item.name}
                         </a>
@@ -102,7 +102,7 @@ export default function Navbar({ isDark, setIsDark }) {
                 <div className="flex items-center gap-2 pr-1 md:pr-2">
                     <button
                         onClick={() => setIsDark(!isDark)}
-                        className="p-2.5 rounded-xl bg-white dark:bg-violet-950/40 text-slate-900 dark:text-violet-400 border border-slate-200 dark:border-violet-500/20 shadow-sm active:scale-90 transition-all"
+                        className="p-2.5 rounded-xl bg-white dark:bg-[#0A1128] text-slate-900 dark:text-amber-500 border border-slate-200 dark:border-amber-500/20 shadow-sm active:scale-90 transition-all"
                     >
                         <AnimatePresence mode="wait">
                             {isDark ? (
@@ -117,13 +117,13 @@ export default function Navbar({ isDark, setIsDark }) {
                         </AnimatePresence>
                     </button>
 
-                    <button onClick={()=>navigate('/register')} className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-slate-900 dark:bg-violet-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-indigo-600 dark:hover:bg-violet-500 hover:shadow-lg transition-all active:scale-95">
+                    <button onClick={()=>navigate('/register')} className="hidden sm:flex items-center gap-2 px-6 py-2.5 bg-[#0A1128] dark:bg-amber-500 text-white dark:text-[#0A1128] text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:bg-slate-800 dark:hover:bg-amber-400 hover:shadow-lg transition-all active:scale-95">
                         Apply <ArrowUpRight size={14} />
                     </button>
 
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden p-2.5 rounded-xl text-slate-900 dark:text-white bg-white dark:bg-violet-950/40 border border-slate-200 dark:border-violet-500/20 shadow-sm"
+                        className="md:hidden p-2.5 rounded-xl text-slate-900 dark:text-white bg-white dark:bg-[#0A1128] border border-slate-200 dark:border-amber-500/20 shadow-sm"
                     >
                         {isOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>
@@ -139,7 +139,7 @@ export default function Navbar({ isDark, setIsDark }) {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="fixed inset-0 bg-white/90 dark:bg-black/90 backdrop-blur-xl z-[1001] md:hidden pointer-events-auto"
+                            className="fixed inset-0 bg-white/90 dark:bg-[#0A1128]/95 backdrop-blur-xl z-[1001] md:hidden pointer-events-auto"
                         />
 
                         <motion.div
@@ -147,7 +147,7 @@ export default function Navbar({ isDark, setIsDark }) {
                             animate={{ x: 0 }}
                             exit={{ x: "100%" }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="fixed top-0 right-0 h-screen w-[85%] max-w-[320px] bg-white dark:bg-[#050505] border-l border-slate-200 dark:border-violet-500/20 p-10 flex flex-col z-[1002] md:hidden shadow-2xl pointer-events-auto"
+                            className="fixed top-0 right-0 h-screen w-[85%] max-w-[320px] bg-white dark:bg-[#0A1128] border-l border-slate-200 dark:border-amber-500/20 p-10 flex flex-col z-[1002] md:hidden shadow-2xl pointer-events-auto"
                         >
                             <div className="flex justify-end mb-12">
                                 <button onClick={() => setIsOpen(false)} className="p-2 text-slate-900 dark:text-white">
@@ -164,7 +164,7 @@ export default function Navbar({ isDark, setIsDark }) {
                                         key={item.name}
                                         href={item.href}
                                         onClick={(e) => handleScrollTo(e, item.href)}
-                                        className="text-5xl font-black uppercase tracking-tighter text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-violet-500 transition-colors"
+                                        className="text-5xl font-black uppercase tracking-tighter text-[#0A1128] dark:text-white hover:text-amber-500 dark:hover:text-amber-500 transition-colors"
                                     >
                                         {item.name}
                                     </motion.a>
@@ -172,7 +172,7 @@ export default function Navbar({ isDark, setIsDark }) {
                             </nav>
 
                             <div className="mt-auto">
-                                <Button onClick={()=>navigate('/register')} className="w-full py-5 bg-indigo-600 dark:bg-violet-600 text-white font-black rounded-2xl uppercase tracking-widest text-[10px] shadow-xl">
+                                <Button onClick={()=>navigate('/register')} className="w-full py-5 bg-[#0A1128] dark:bg-amber-500 text-white dark:text-[#0A1128] font-black rounded-2xl uppercase tracking-widest text-[10px] shadow-xl">
                                     Join Academy
                                 </Button>
                             </div>

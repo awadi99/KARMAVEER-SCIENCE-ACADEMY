@@ -3,6 +3,9 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 
+body {
+    font-family: 'Poppins', sans-serif;
+  }
   
 
 .navbar {
@@ -46,20 +49,19 @@
 
 
 @theme {
-
-    /* Define the Wave Keyframes */
     @keyframes wave {
-        0% {
-            transform: translate3d(90px, 0, 0);
-        }
-
-        100% {
-            transform: translate3d(-85px, 0, 0);
-        }
+        0% { transform: translate3d(-90px, 0, 0); }
+        100% { transform: translate3d(85px, 0, 0); }
     }
 
-    /* Define the Animation Utilities */
-    --animate-wave-slow: wave 30s cubic-bezier(.55, .5, .45, .5) infinite;
-    --animate-wave-med: wave 15s cubic-bezier(.55, .5, .45, .5) infinite;
-    --animate-wave-fast: wave 5s cubic-bezier(.55, .5, .45, .5) infinite;
+    /* Professional Wave Speeds */
+    --animate-wave-slow: wave 25s cubic-bezier(.55, .5, .45, .5) infinite;
+    --animate-wave-med: wave 18s cubic-bezier(.55, .5, .45, .5) infinite;
+    --animate-wave-fast: wave 10s cubic-bezier(.55, .5, .45, .5) infinite;
+}
+
+@layer base {
+    .hero-wave-container {
+        @apply w-full overflow-hidden leading-[0] pointer-events-none;
+    }
 }
