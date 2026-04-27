@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; 
 import { Mail, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import * as z from 'zod';
@@ -9,7 +9,6 @@ import * as z from 'zod';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { AddLayout } from '../components/ui/AuthLayout.jsx';
-
 // Simple schema for email validation
 const forgotSchema = z.object({
     email: z.string().email("Please enter a valid academy email"),
