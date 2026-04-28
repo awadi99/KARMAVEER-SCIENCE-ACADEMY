@@ -1,17 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import LandingPage from './page/LandingPage'
 import SmoothScroll from './components/scroll/SmoothScroll';
-import Register from './page/Register';
-import Login from './page/Login';
-import MainLayout from './layouts/MainLayout';
-import Dashboard from './page/Dashboard';
-import Student from './page/Student';
-import ForgotPassword from './page/ForgotPassword';
+import TestPage from './page/TestPage';
+
+const LandingPage = lazy(() => import('./page/LandingPage'));
+const Register = lazy(() => import('./page/Register'));
+const Login = lazy(() => import('./page/Login'));
+const Dashboard = lazy(() => import('./page/Dashboard'));
+const Student = lazy(() => import('./page/Student'));
+const ForgotPassword = lazy(() => import('./page/ForgotPassword'));
+const MainLayout = lazy(()=>import ('./layouts/MainLayout'));
+
+
+
+
+
 
 
 export default function App() {
-  // Initialize from localStorage so it remembers the user's choice on refresh
+  
   const [isDark, setIsDark] = useState(() => {
     return localStorage.getItem('theme') === 'dark' || !('theme' in localStorage);
   });
@@ -41,6 +48,8 @@ export default function App() {
             <Route path="/dashboard" element={<MainLayout isDark={isDark} setIsDark={setIsDark} />}>
               <Route index element={<Dashboard/>}></Route>
               <Route path="students" element={<Student/>}/>
+              <Route path='tests' element={<TestPage/>}/>
+              
             </Route>
           </Routes>
         </div>

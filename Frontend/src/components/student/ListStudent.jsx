@@ -1,48 +1,73 @@
 import React, { memo } from 'react';
-import { Trash2, Mail, Calendar, Hash } from 'lucide-react';
+import { Trash2, Mail, Calendar, User, ShieldCheck } from 'lucide-react';
 
 const STUDENT_DATA = [
-    { id: 1, name: "Arjun Mehta", email: "arjun.m@academy.com", roll: "A-10", date: "12 April 2026" },
-    { id: 2, name: "Sneha Patil", email: "sneha.p@academy.com", roll: "A-11", date: "15 April 2026" },
-    { id: 3, name: "Rahul Vichare", email: "rahul.v@academy.com", roll: "A-12", date: "18 April 2026" },
+    { id: 1, name: "Arjun Mehta", email: "arjun.m@academy.edu", roll: "2026-A10", date: "Registered: 12 April" },
+    { id: 2, name: "Sneha Patil", email: "sneha.p@academy.edu", roll: "2026-A11", date: "Registered: 15 April" },
+    { id: 3, name: "Rahul Vichare", email: "rahul.v@academy.edu", roll: "2026-A12", date: "Registered: 18 April" },
 ];
 
 const ListStudent = memo(() => {
     return (
-        /* Removed heavy gradients: replaced with a simple solid border for performance */
-        <div className="w-full rounded-[2rem] border border-indigo-500/20 dark:border-white/5 bg-white dark:bg-[#050507] overflow-hidden will-change-transform">
+        <div 
+            /* Academic Slate & Navy Blue Theme */
+            className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] overflow-hidden isolate shadow-sm"
+            style={{ contain: 'content', contentVisibility: 'auto' }}
+        >
             
-            {/* Desktop Table: Optimized for rapid scrolling */}
-            <div className="hidden md:block">
-                <table className="w-full text-left border-collapse">
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
+                <table 
+                    className="w-full text-left border-collapse"
+                    style={{ tableLayout: 'fixed' }}
+                >
+                    <colgroup>
+                        <col style={{ width: '35%' }} />
+                        <col style={{ width: '20%' }} />
+                        <col style={{ width: '25%' }} />
+                        <col style={{ width: '20%' }} />
+                    </colgroup>
                     <thead>
-                        <tr className="bg-slate-50 dark:bg-white/[0.02] text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">
-                            <th className="px-8 py-4">Student</th>
-                            <th className="px-8 py-4">Roll No</th>
-                            <th className="px-8 py-4">Joined</th>
-                            <th className="px-8 py-4 text-right">Actions</th>
+                        <tr className="bg-slate-50 dark:bg-slate-900/50 text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-100 dark:border-slate-800">
+                            <th className="px-6 py-4 font-semibold italic flex items-center gap-2">
+                                <User size={12}/> Student Name
+                            </th>
+                            <th className="px-6 py-4 font-semibold">Roll Number</th>
+                            <th className="px-6 py-4 font-semibold">Status</th>
+                            <th className="px-6 py-4 text-right font-semibold">Management</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-50 dark:divide-white/[0.03]">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {STUDENT_DATA.map((student) => (
-                            <tr key={student.id} className="hover:bg-indigo-50/30 dark:hover:bg-indigo-500/[0.02] transition-colors duration-75">
-                                <td className="px-8 py-4">
-                                    <div className="flex items-center gap-4">
-                                        <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xs">
+                            <tr 
+                                key={student.id} 
+                                className="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors duration-75 transform-gpu"
+                            >
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-9 w-9 shrink-0 rounded-full bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold text-xs shadow-sm">
                                             {student.name.charAt(0)}
                                         </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-[12px] font-black dark:text-white uppercase leading-tight">{student.name}</span>
-                                            <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 leading-tight mt-0.5"><Mail size={10} /> {student.email}</span>
+                                        <div className="flex flex-col min-w-0">
+                                            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate tracking-tight">{student.name}</span>
+                                            <span className="text-[11px] text-slate-500 flex items-center gap-1 truncate"><Mail size={10} /> {student.email}</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td className="px-8 py-4">
-                                    <span className="px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-500 text-[10px] font-black">{student.roll}</span>
+                                <td className="px-6 py-4">
+                                    <span className="text-xs font-medium font-mono text-slate-600 dark:text-slate-400">
+                                        {student.roll}
+                                    </span>
                                 </td>
-                                <td className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase">{student.date}</td>
-                                <td className="px-8 py-4 text-right">
-                                    <button className="p-2 rounded-lg text-slate-300 hover:text-rose-500 active:scale-90 transition-all transform-gpu">
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+                                        <ShieldCheck size={12} />
+                                        <span className="text-[11px] font-bold uppercase tracking-tight">{student.date}</span>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    {/* Bin Icon Restored */}
+                                    <button className="p-2 rounded-lg text-slate-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 active:scale-90 transition-all transform-gpu">
                                         <Trash2 size={16} />
                                     </button>
                                 </td>
@@ -52,32 +77,31 @@ const ListStudent = memo(() => {
                 </table>
             </div>
 
-            {/* Mobile Cards: Simplified layout to prevent layout shift lag */}
-            <div className="md:hidden divide-y divide-slate-50 dark:divide-white/[0.05]">
+            {/* Mobile Cards */}
+            <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800">
                 {STUDENT_DATA.map((student) => (
-                    <div key={student.id} className="p-5">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                                <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xs">
-                                    {student.name.charAt(0)}
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-[13px] font-black dark:text-white uppercase leading-none">{student.name}</span>
-                                    <span className="text-[10px] font-bold text-slate-500 mt-1">{student.email}</span>
-                                </div>
+                    <div key={student.id} className="p-5 transform-gpu bg-white dark:bg-slate-900">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                                {student.name.charAt(0)}
                             </div>
-                            <button className="p-2 rounded-xl text-rose-500 active:bg-rose-500/10 transition-colors">
-                                <Trash2 size={16} />
+                            <div className="flex-1 min-w-0">
+                                <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{student.name}</h4>
+                                <p className="text-xs text-slate-500 truncate">{student.email}</p>
+                            </div>
+                            {/* Bin Icon for Mobile */}
+                            <button className="p-2 text-slate-300 hover:text-red-500 active:scale-90">
+                                <Trash2 size={18} />
                             </button>
                         </div>
-                        <div className="flex gap-2">
-                            <div className="flex-1 bg-slate-50 dark:bg-white/[0.03] p-2 rounded-lg flex items-center gap-2">
-                                <Hash size={12} className="text-indigo-500" />
-                                <span className="text-[10px] font-black dark:text-slate-300 uppercase">{student.roll}</span>
+                        <div className="grid grid-cols-2 gap-2">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg border border-slate-100 dark:border-slate-800">
+                                <p className="text-[9px] uppercase font-bold text-slate-400 mb-1">ID Code</p>
+                                <p className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">{student.roll}</p>
                             </div>
-                            <div className="flex-1 bg-slate-50 dark:bg-white/[0.03] p-2 rounded-lg flex items-center gap-2">
-                                <Calendar size={12} className="text-indigo-500" />
-                                <span className="text-[10px] font-black dark:text-slate-300 uppercase">{student.date}</span>
+                            <div className="bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg border border-slate-100 dark:border-slate-800">
+                                <p className="text-[9px] uppercase font-bold text-slate-400 mb-1">Status</p>
+                                <p className="text-xs font-bold text-blue-700 dark:text-blue-400">Enrolled</p>
                             </div>
                         </div>
                     </div>

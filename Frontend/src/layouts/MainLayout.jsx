@@ -3,26 +3,26 @@ import Sidebar from "../page/SideBarPage";
 
 export default function MainLayout({ isDark, setIsDark }) {
     return (
-        <div className="flex min-h-screen bg-[#F8FAFF] dark:bg-[#050507]">
-            {/* Sidebar width is 72 (18rem), so we match that exactly */}
+        <div className="flex min-h-screen bg-slate-50 dark:bg-[#0B0F1A] overflow-x-hidden selection:bg-blue-100 selection:text-blue-700">
             <Sidebar isDark={isDark} setIsDark={setIsDark} />
-            
-            {/* 1. Adjusted md:ml-72 to md:ml-64 or match sidebar precisely */}
-            {/* 2. Reduced padding from p-10 to p-6 for a tighter fit */}
-            <div className="flex-1 flex flex-col min-w-0 md:ml-72 transition-all duration-500"> 
-                
-                {/* Glassy Top Header - Height reduced for better vertical space */}
-                <div className="sticky top-0 z-40 bg-white/40 dark:bg-black/20 backdrop-blur-md h-14 w-full border-b border-black/5 dark:border-white/5"></div>
-                
-                {/* 3. Reduced p-10 to p-4/p-6 and removed max-w restriction if you want it closer */}
-                <main className="relative flex-1 p-4 sm:p-5 md:p-6 w-full transition-all">
-                    
-                    {/* Background Decorative Glows - Optimized blur to prevent lag */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                        <div className="absolute top-0 left-0 w-[30%] h-[30%] bg-violet-600/5 blur-[80px] rounded-full" />
+
+            <div className="flex-1 flex flex-col min-w-0 md:ml-64 transition-all duration-300 ease-in-out">
+                {/* OPTIMIZATION: 
+                   1. Removed 'border-b' to kill the sharp line.
+                   2. Added 'dark:bg-white/[0.01]'—this tiny bit of tint helps the blur look "real" without a line.
+                */}
+                <header className="fixed top-0 z-40 w-full h-14 px-6 flex items-center justify-between bg-transparent backdrop-blur-xl backdrop-saturate-150 will-change-transform">
+                    {/* Optional: Add a very faint, almost invisible bottom shadow instead of a line */}
+                    <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-200/20 dark:via-white/[0.05] to-transparent" />
+                </header>
+
+                <main className="relative flex-1 p-4 sm:p-6 lg:p-10 w-full mt-10">
+                    {/* Background Blur */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+                        <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-blue-600/[0.02] dark:bg-blue-500/[0.04] blur-[120px] rounded-full transform-gpu" />
                     </div>
 
-                    <div className="relative z-10">
+                    <div className="relative z-10 max-w-7xl mx-auto w-full">
                         <Outlet />
                     </div>
                 </main>

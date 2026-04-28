@@ -8,12 +8,17 @@ const DATA = [
     { day: 'Sun', tests: 9 },
 ];
 
+/**
+ * Optimized Tooltip: 
+ * Removed backdrop-blur and gradients (expensive paints).
+ * Uses solid academic blue.
+ */
 const CustomTooltip = memo(({ active, payload }) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-[#0A0A0C] border border-indigo-500/40 px-3 py-1 rounded-xl shadow-2xl backdrop-blur-md">
-                <p className="text-[10px] font-black text-indigo-400 uppercase tracking-tighter">
-                    {`${payload[0].value} Tests`}
+            <div className="bg-slate-900 dark:bg-blue-950 px-3 py-1.5 rounded-lg shadow-xl border border-slate-700">
+                <p className="text-[10px] font-bold text-white uppercase tracking-wider">
+                    {`${payload[0].value} Tests Completed`}
                 </p>
             </div>
         );
@@ -22,38 +27,41 @@ const CustomTooltip = memo(({ active, payload }) => {
 });
 
 const TestGraph = memo(() => {
+    // Memoize the chart structure to prevent re-calculations on scroll
     const chart = useMemo(() => (
-        <LineChart data={DATA} margin={{ top: 5, right: 10, left: -35, bottom: 0 }}>
+        <LineChart data={DATA} margin={{ top: 10, right: 10, left: -30, bottom: 0 }}>
             <CartesianGrid 
                 vertical={false} 
-                strokeDasharray="6 6" 
+                strokeDasharray="4 4" 
                 stroke="currentColor" 
-                className="text-slate-200/30 dark:text-white/5" 
+                className="text-slate-200 dark:text-slate-800" 
             />
             <XAxis 
                 dataKey="day" 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fontSize: 8, fontWeight: 800, fill: '#94a3b8' }}
-                dy={8}
+                tick={{ fontSize: 10, fontWeight: 600, fill: '#64748b' }}
+                dy={10}
             />
             <YAxis 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fontSize: 8, fontWeight: 800, fill: '#94a3b8' }}
+                tick={{ fontSize: 10, fontWeight: 600, fill: '#64748b' }}
             />
             <Tooltip 
                 content={<CustomTooltip />} 
-                cursor={{ stroke: '#6366f1', strokeWidth: 1, strokeDasharray: '4 4' }}
-                isAnimationActive={false}
+                cursor={{ stroke: '#3b82f6', strokeWidth: 1 }}
+                /* disable animation for instant hover response */
+                isAnimationActive={false} 
             />
             <Line
                 type="monotone"
                 dataKey="tests"
-                stroke="#818cf8"
-                strokeWidth={2.5}
-                dot={{ r: 3, fill: '#818cf8', strokeWidth: 2, stroke: '#fff' }}
-                activeDot={{ r: 5, strokeWidth: 0 }}
+                stroke="#2563eb" /* Royal Academic Blue */
+                strokeWidth={3}
+                dot={{ r: 4, fill: '#2563eb', strokeWidth: 2, stroke: '#fff' }}
+                activeDot={{ r: 6, strokeWidth: 0 }}
+                /* CRITICAL: isAnimationActive={false} removes SVG re-draw lag */
                 isAnimationActive={false}
                 className="transform-gpu"
             />
@@ -61,21 +69,28 @@ const TestGraph = memo(() => {
     ), []);
 
     return (
-        <div className="w-full">
-            <div className="flex items-center justify-between mb-3 px-1">
-                <div className="flex flex-col">
-                    <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest leading-none mb-1">Performance</span>
-                    <h2 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Tests Conducted</h2>
+        <div className="w-full bg-white dark:bg-[#0F172A] p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm isolate">
+            <header className="flex items-center justify-between mb-6">
+                <div>
+                    <h2 className="text-sm font-bold text-slate-900 dark:text-slate-50 uppercase tracking-tight">
+                        Weekly Test Activity
+                    </h2>
+                    <p className="text-[11px] font-medium text-slate-500">Student participation metrics</p>
                 </div>
-            </div>
+                <div className="flex gap-2">
+                    <span className="h-2 w-2 rounded-full bg-blue-600 mt-1"></span>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active</span>
+                </div>
+            </header>
 
-            {/* SLIMMER ASPECT RATIO: Changed from 16/9 to 3/1 for a more compact vertical footprint */}
-            <div className="p-[1px] rounded-[2rem] bg-gradient-to-br from-indigo-500/40 via-purple-500/20 to-transparent shadow-md shadow-indigo-500/5">
-                <div className="w-full aspect-[2/1] sm:aspect-[3/1] lg:aspect-[4/1] bg-white dark:bg-[#050507] rounded-[calc(2rem-1px)] p-4 sm:p-5 relative transform-gpu">
-                    <ResponsiveContainer width="100%" height="100%">
-                        {chart}
-                    </ResponsiveContainer>
-                </div>
+            {/* Responsive Aspect Ratio:
+                - Mobile: Tall enough to read (2/1)
+                - Desktop: Wide and slim (4/1)
+            */}
+            <div className="w-full aspect-[2/1] lg:aspect-[4/1] relative transform-gpu" style={{ contain: 'content' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                    {chart}
+                </ResponsiveContainer>
             </div>
         </div>
     );

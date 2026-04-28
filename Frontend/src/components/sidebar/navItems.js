@@ -27,11 +27,6 @@ export const navItems = [
         path: "/dashboard/tests",
         icon: FileText,
     },
-    {
-        name: "Attendance",
-        path: "/dashboard/attendance",
-        icon: BookOpenCheck,
-    },
 
     {
         name: "Fees",
