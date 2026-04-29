@@ -1,10 +1,12 @@
+import React,{lazy} from 'react';
+
 import Navbar from '../components/common/NavBar';
-import Hero from '../components/landingPage/Hero';
 import Features from '../components/landingPage/Features';
 import VisionMission from '../components/landingPage/VisionMission';
-import AboutUs from '../components/landingPage/AboutUs';
  import FAQ from '../components/landingPage/FAQ';
- import ContactUs from '../components/landingPage/ContactUs';
+ const Hero = lazy(()=>import('../components/landingPage/Hero'));
+ const AboutUs = lazy(()=>import('../components/landingPage/AboutUs'));
+ const ContactUs = lazy(()=>import(('../components/landingPage/ContactUs')));
 import Footer from '../components/common/Footer';
 
 
