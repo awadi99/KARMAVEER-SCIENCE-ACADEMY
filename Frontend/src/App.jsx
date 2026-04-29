@@ -2,6 +2,7 @@ import React, { useState, useEffect,lazy } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import SmoothScroll from './components/scroll/SmoothScroll';
 import TestPage from './page/TestPage';
+import { Lasso } from 'lucide-react';
 
 const LandingPage = lazy(() => import('./page/LandingPage'));
 const Register = lazy(() => import('./page/Register'));
@@ -10,6 +11,9 @@ const Dashboard = lazy(() => import('./page/Dashboard'));
 const Student = lazy(() => import('./page/Student'));
 const ForgotPassword = lazy(() => import('./page/ForgotPassword'));
 const MainLayout = lazy(()=>import ('./layouts/MainLayout'));
+const FeePage = lazy(()=>import('./page/FeePage'));
+const ProfilePage = lazy(()=>import('./page/ProfilePage'));
+
 
 
 
@@ -49,6 +53,10 @@ export default function App() {
               <Route index element={<Dashboard/>}></Route>
               <Route path="students" element={<Student/>}/>
               <Route path='tests' element={<TestPage/>}/>
+              <Route path='fees' element={<FeePage/>}/>
+              <Route path='profile' element={<ProfilePage/>}/>
+              
+              
               
             </Route>
           </Routes>
