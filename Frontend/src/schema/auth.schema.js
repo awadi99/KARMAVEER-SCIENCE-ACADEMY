@@ -13,12 +13,15 @@ const signupSchema = z.object({
         .max(50, "Full name is too long")
         .trim(),
 
-    erpId:z
-    .string()
-    .min(3  ,"ErpId must be at least 3 characters")
-    .max(5 ,"ErpId too long")
-    .regex(usernameRegex, "Only letters, numbers, underscore")
-    .trim(),
+        erpId: z
+        .string()
+        .min(3, "ErpId must be at least 3 characters")
+        .max(5, "ErpId too long")
+        .regex(usernameRegex, "Only letters, numbers, underscore")
+        .trim()
+        .refine((val) => val === val.toUpperCase(), {
+            message: "ERPID must be all capital letters",
+        }),
 
     email: z
         .string()
