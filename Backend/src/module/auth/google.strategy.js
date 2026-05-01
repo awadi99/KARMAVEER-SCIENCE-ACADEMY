@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "./auth.model.js";
-import { generateUsername } from "../../utils/generateUsername.js";
+import redisClient from "../../config/redis.js";
 
 passport.use(
     new GoogleStrategy(
@@ -9,32 +9,34 @@ passport.use(
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: "http://localhost:3000/api/auth/google/callback",
-            scope: ["profile", "email"]
+            passReqToCallback:true
         },
-        async (accessToken, refreshToken, profile, done) => {
+        async (req, accessToken, refreshToken, profile, done) => {
             try {
 
                 const email = profile.emails?.[0]?.value;
+                let user = await User.findOne({email});
 
                 if (!email) {
                     return done(new Error("Email not found"), null);
                 }
 
-                let user = await User.findOne({ email });
-
                 if (!user) {
+                    const erpId = req.query.state;
+                    const role = await redisClient.get(`auth:${erpId}`);
 
-                    const username = await generateUsername(profile.displayName);
+                    if(!role) return done(new Error("Unauthorized ERP ID"),null);
 
                     user = await User.create({
                         fullName: profile.displayName,
                         email,
-                        userName: username,
+                        erpId,
                         profilePic: profile.photos?.[0]?.value,
+                        role,
                         isGoogleUser: true
                     });
-
                 }
+                await redisClient.del(`auth:${erpId}`);
                 return done(null, user);
                 
             } catch (error) {

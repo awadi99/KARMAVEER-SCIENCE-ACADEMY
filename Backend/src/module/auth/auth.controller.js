@@ -5,7 +5,11 @@ export const register = async(req,res)=>{
     try{
         const user = await signupService(req.body);
 
-        generateToken(user._id,res);
+        generateToken({
+            id:user._id,
+            role:user.role,
+            erpId:user.erpId
+        },res);
 
         res.status(201).json({
             _id:user._id,
@@ -28,7 +32,11 @@ export const login = async (req,res)=>{
 
         const user = await loginService(req.body);
 
-        generateToken(user._id,res);
+        generateToken({
+            id:user._id,
+            role:user.role,
+            erpId:user.erpId
+        },res);
 
         res.json({
             _id:user._id,
@@ -66,7 +74,11 @@ export const logout = async(req,res)=>{
 
 export const googleCallback = async(req,res)=>{
     try{
-        generateToken(req.user._id,res);
+        generateToken({
+            id:req.user._id,
+            role:req.user.role,
+            erpId:req.user.erpId
+        },res);
         res.redirect("http://localhost:5173/");
     }
     catch(error){

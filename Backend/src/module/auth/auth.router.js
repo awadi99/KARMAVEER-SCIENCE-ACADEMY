@@ -9,12 +9,13 @@ router.post("/register", validate(signupSchema), register);
 router.post("/login", validate(loginSchema), login);
 router.post("/logout", logout);
 
-router.get(
-    "/google",
-    passport.authenticate("google", {
-        scope: ["profile", "email"]
-    })
-);
+router.get("/google", (req, res, next) => {
+    const { erpId } = req.query; // Frontend se aayega
+    passport.authenticate("google", { 
+        scope: ["profile", "email"],
+        state: erpId // Ye value 'req.query.state' ban kar callback mein milegi
+    })(req, res, next);
+});
 
 
 router.get(

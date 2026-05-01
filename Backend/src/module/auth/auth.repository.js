@@ -1,7 +1,11 @@
 import User from './auth.model.js';
 
 export const findUserByEmail =async(email)=>{
-    return await User.findOne({email}).select("+password");
+    return await User.findOne({email});
+};
+
+export const findUserByEmailForLogin = async (email) => {
+    return await User.findOne({ email }).select("+password");
 };
 
 export const  createUser = async(data)=>{
