@@ -5,13 +5,14 @@ export const findUserByEmail =async(email)=>{
 };
 
 export const findUserByEmailForLogin = async (email) => {
-    return await User.findOne({ email }).select("+password");
+    return await User.findOne({ email }).select("+password").lean();
 };
 
 export const  createUser = async(data)=>{
     return await User.create(data);
 };
 
-export const  findUserById = async(id)=>{
-    return await User.findById(id);
-}
+export const findUserById = async (userId) => { // 👈 Parameter ka naam badal do 'userId' kar do
+    console.log("Searching for ID in DB:", userId); 
+    return await User.findById(userId);
+};

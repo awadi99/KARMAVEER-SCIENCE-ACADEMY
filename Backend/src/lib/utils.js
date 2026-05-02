@@ -1,8 +1,12 @@
 import jwt from 'jsonwebtoken';
 
-export const generateToken = (userId,res)=>{
+export const generateToken = (userData,res)=>{
     const token = jwt.sign(
-        {userId},
+        { 
+            id: userData.id,      // Sirf string ID
+            role: userData.role,  // Role
+            erpId: userData.erpId // ERP ID
+        }, 
         process.env.JWT_SECRET,
         {expiresIn:'7d',}
     );
@@ -14,3 +18,4 @@ export const generateToken = (userId,res)=>{
     });
     return token;
 }
+
