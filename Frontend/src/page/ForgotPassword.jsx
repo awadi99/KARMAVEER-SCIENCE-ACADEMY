@@ -1,101 +1,133 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion, AnimatePresence } from 'framer-motion'; 
-import { Mail, ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import * as z from 'zod';
+import { KeyRound, ArrowLeft, CheckCircle2, ShieldCheck, Mail } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
+// Custom Hooks aur Components
+import { useAuth } from '../hook/useAuth.js';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { AddLayout } from '../components/ui/AuthLayout.jsx';
-// Simple schema for email validation
-const forgotSchema = z.object({
-    email: z.string().email("Please enter a valid academy email"),
-});
+
+import resetPasswordSchema from '../schema/auth.reset.password.schema.js' 
 
 export default function ForgotPassword() {
-    const [isSent, setIsSent] = useState(false);
-    
+    const [isSuccess, setIsSuccess] = useState(false);
+    const navigate = useNavigate();
+    const { resetPassword } = useAuth();
+
+    // Optimization 1: mode "onTouched" rakha hai taaki har letter par validation na chale
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm({
-        resolver: zodResolver(forgotSchema),
+        resolver: zodResolver(resetPasswordSchema),
+        mode: "onTouched", 
     });
 
-    const onSubmit = async (data) => {
-        try {
-            // API Call to trigger reset email
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            console.log("Reset link sent to:", data.email);
-            setIsSent(true);
-        } catch (err) {
-            console.error("Reset failed", err);
-        }
+    
+    const onSubmit = (data) => {
+
+        const payload = {
+            email: data.email,
+            erpId: data.erpId,
+            newPassword: data.password 
+        };
+
+        resetPassword.mutate(payload, {
+            onSuccess: (response) => {
+                toast.success(response.message || "Password updated successfully!");
+                setIsSuccess(true);
+            },
+            onError: (err) => {
+                const errorMsg = err.response?.data?.message || "Invalid Email or ERP ID";
+                toast.error(errorMsg);
+            }
+        });
     };
 
     return (
         <AddLayout 
-            title={isSent ? "Check Email" : "Reset Password"} 
-            subtitle={isSent ? "We sent a link to your inbox" : "Enter your email to recover your account"}
+            title={isSuccess ? "Success!" : "Reset Access"} 
+            subtitle={isSuccess ? "Password updated" : "Enter details to recover your account"}
         >
             <AnimatePresence mode="wait">
-                {!isSent ? (
+                {!isSuccess ? (
                     <motion.form 
                         key="form"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 10 }}
+                        // Optimization 3: Animations ko simple rakha hai taaki GPU par load na pade
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         onSubmit={handleSubmit(onSubmit)} 
-                        className="space-y-6"
+                        className="space-y-5"
                     >
                         <Input
-                            label="Registered Email"
-                            type="email"
-                            placeholder="student@scienceacademy.com"
+                            label="ERP ID"
+                            placeholder="KSA123"
+                            icon={<ShieldCheck size={18} />}
+                            error={errors.erpId?.message}
+                            {...register("erpId")}
+                            // ERP ID uppercase hone ke liye auto-transform (UI only)
+                            onChange={(e) => e.target.value = e.target.value.toUpperCase()}
+                        />
+
+                        <Input
+                            label="Academy Email"
+                            placeholder="name@scienceacademy.com"
+                            icon={<Mail size={18} />}
                             error={errors.email?.message}
                             {...register("email")}
                         />
 
+                        <Input
+                            label="New Password"
+                            type="password"
+                            placeholder="••••••••"
+                            icon={<KeyRound size={18} />}
+                            error={errors.password?.message}
+                            {...register("password")}
+                        />
+
                         <Button 
                             type="submit" 
-                            loading={isSubmitting}
-                            className="w-full py-4 shadow-xl shadow-violet-600/20"
+                            loading={resetPassword.isPending} 
+                            className="w-full py-4 shadow-lg shadow-violet-600/10"
                         >
-                            Send Reset Link <Mail size={16} className="ml-2" />
+                            Update Password <KeyRound size={16} className="ml-2" />
                         </Button>
 
-                        <div className="text-center mt-6">
+                        <div className="text-center mt-4">
                             <Link 
                                 to="/login" 
-                                className="inline-flex items-center gap-2 text-slate-500 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors"
+                                className="inline-flex items-center gap-2 text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-tighter transition-colors"
                             >
-                                <ArrowLeft size={14} /> Back to Login
+                                <ArrowLeft size={12} /> Back to Login
                             </Link>
                         </div>
                     </motion.form>
                 ) : (
                     <motion.div 
                         key="success"
-                        initial={{ opacity: 0, scale: 0.9 }}
+                        initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="text-center py-4"
+                        className="text-center py-2"
                     >
-                        <div className="flex justify-center mb-6">
-                            <div className="p-4 bg-green-500/10 rounded-full">
-                                <CheckCircle2 size={48} className="text-green-500" />
+                        <div className="flex justify-center mb-4">
+                            <div className="p-3 bg-green-500/10 rounded-full">
+                                <CheckCircle2 size={40} className="text-green-500" />
                             </div>
                         </div>
-                        <p className="text-slate-400 text-sm leading-relaxed mb-8">
-                            If an account exists for that email, you will receive a password reset link shortly.
+                        <p className="text-slate-400 text-sm mb-6">
+                            Security credentials updated. Log in to continue.
                         </p>
-                        <Link to="/login">
-                            <Button className="w-full py-4 bg-white/5 border border-white/10 hover:bg-white/10">
-                                Return to Login
-                            </Button>
-                        </Link>
+                        <Button onClick={() => navigate('/login')} className="w-full">
+                            Go to Login
+                        </Button>
                     </motion.div>
                 )}
             </AnimatePresence>
