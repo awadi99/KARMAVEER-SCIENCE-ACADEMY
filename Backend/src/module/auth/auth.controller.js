@@ -101,6 +101,47 @@ export const resetPasswordDirect = async (req, res) => {
     }
 }
 
+export const updateAcademicProfile = async (req,res)=>{
+    try{
+
+        const { standard, stream } = req.body
+        const userId = req.user._id;
+
+        if (standard && ![11, 12].includes(Number(standard))) {
+            return res.status(400).json({ success: false, message: "Invalid Standard" });
+        }
+
+        if (stream && !["PCM", "PCB", "PCMB"].includes(stream)) {
+            return res.status(400).json({ success: false, message: "Invalid Stream" });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: { standard, stream } },
+            { 
+                returnDocument: 'after',
+                runValidators: true, 
+                lean: true 
+            }
+        ).select("-password"); 
+
+        res.status(200).json({
+            success: true,
+            message: "Academic profile updated successfully",
+            user: updatedUser
+        });
+
+
+    }catch(error){
+
+        console.error("Update Error:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+
+
+    }
+}
+
+
 
 export const logout = async (req, res) => {
 
@@ -123,15 +164,29 @@ export const logout = async (req, res) => {
 
 export const googleCallback = async (req, res) => {
     try {
+        
         generateToken({
             id: req.user._id,
             role: req.user.role,
             erpId: req.user.erpId
         }, res);
-        res.redirect("http://localhost:5173/");
+
+        
+        const frontendUrl = "http://localhost:5173";
+        let targetPath = "/dashboard"; 
+
+        if (req.user.role !== 'admin') {
+            
+            const isIncomplete = !req.user.standard || !req.user.stream;
+            targetPath = isIncomplete ? "/dashboard/profile" : "/dashboard/tests";
+        }
+
+        
+        res.redirect(`${frontendUrl}${targetPath}`);
     }
     catch (error) {
-        res.redirect("http://localhost:5173/login");
+        console.error("Google Callback Error:", error);
+        res.redirect("http://localhost:5173/login?error=auth_failed");
     }
 }
 

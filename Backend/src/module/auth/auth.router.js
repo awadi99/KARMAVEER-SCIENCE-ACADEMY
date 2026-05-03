@@ -7,7 +7,8 @@ import {
     logout,
     googleCallback,
     verifyErpId,
-    resetPasswordDirect
+    resetPasswordDirect,
+    updateAcademicProfile
 
 } from "./auth.controller.js";
 import { signupSchema, loginSchema } from "../../validators/auth.vaildator.js";
@@ -19,6 +20,7 @@ const router = express.Router();
 
 router.post("/register", validate(signupSchema), register);
 router.post("/login", validate(loginSchema), login);
+router.patch("/update-profile" ,protect, updateAcademicProfile)
 router.post("/reset-password", resetPasswordDirect);
 router.post("/logout", logout);
 

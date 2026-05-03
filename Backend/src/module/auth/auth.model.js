@@ -4,11 +4,11 @@ const authSchema = new mongoose.Schema(
     {
         erpId: {
             type: String,
-            required: true, // Kyunki aapka logic hai ki sabko pehle ERP ID bharni hi hai
+            required: true, 
             unique: true,
             sparse: true,
             trim: true,
-            index:true,
+            index: true,
             minLength: 3,
             maxLength: 30,
         },
@@ -23,7 +23,7 @@ const authSchema = new mongoose.Schema(
             unique: true,
             lowercase: true,
             trim: true,
-            index:true,
+            index: true,
             match: [
                 /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                 "Please enter a valid email",
@@ -35,13 +35,13 @@ const authSchema = new mongoose.Schema(
                 return !this.isGoogleUser;
             },
             minLength: 8,
-            select: false,
+            select: false, // Security: Query mein password default nahi aayega
         },
-        // --- NEW FIELDS ADDED BELOW ---
         role: {
             type: String,
             required: true,
             enum: ["student", "admin"],
+            default: "student", // Safety for auto-registrations
         },
         isGoogleUser: {
             type: Boolean,
@@ -51,12 +51,26 @@ const authSchema = new mongoose.Schema(
             type: String,
             default: "",
         },
+        
+        standard: {
+            type: Number,
+            enum: [11, 12],
+            default: null, 
+            index: true,
+        },
+        stream: {
+            type: String,
+            enum: ["PCM", "PCB", "PCMB", null],
+            default: null,
+            index: true,
+        },
     },
     { timestamps: true }
 );
 
-authSchema.index({ email: 1, erpId: 1 });
 
-const User = mongoose.model("User", authSchema); // "newUser" ko "User" kar diya (Standard naming)
+authSchema.index({ standard: 1, stream: 1 });
+
+const User = mongoose.model("User", authSchema);
 
 export default User;
