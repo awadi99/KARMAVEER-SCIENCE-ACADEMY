@@ -43,7 +43,16 @@ export default function Login() {
         loginUser.mutate(data, {
             onSuccess: (res) => {
                 toast.success(res.message || "Welcome back!");
+                const user = res.user || res; // Backend response structure ke hisaab se
+
+            if (user.role === 'admin') {
                 navigate('/dashboard');
+            } else if (user.standard && user.stream) {
+                navigate('/dashboard');
+            } else {
+                navigate('/dashboard/profile');
+            }
+                
             },
             onError: (err) => {
                 toast.error(err.response?.data?.message || "Invalid email or password");

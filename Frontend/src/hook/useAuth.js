@@ -1,24 +1,66 @@
-// src/hooks/useAuth.js
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import apiClient from '../api/apiClient';
 
 export const useAuth = () => {
     const queryClient = useQueryClient();
 
-    // --- 1. LOGIN (Cookies logic) ---
+    const { data: user, isLoading, isError } = useQuery({
+        queryKey: ['authUser'],
+        queryFn: async () => {
+            try {
+                const { data } = await apiClient.get('/auth/me');
+                return data;
+            } catch (err) {
+                if (err.response?.status === 401) return null;
+                throw err;
+            }
+        },
+        staleTime: 1000 * 60 * 15,
+        retry: false,
+        refetchOnWindowFocus: false,
+    });
+
+    const logout = async () => {
+        try {
+            // 1. Backend ko call karo
+            await apiClient.post('/auth/logout');
+        } catch (err) {
+            console.error("Logout API failed", err);
+        } finally {
+            // 2. Clear everything manually
+            queryClient.clear();
+            sessionStorage.clear();
+            localStorage.clear();
+            
+            // 3. Force Hard Reload to landing page
+            window.location.href = '/'; 
+        }
+    };
+
     const loginUser = useMutation({
         mutationFn: async (credentials) => {
-            // Backend automatically cookie set kar dega browser mein
             const { data } = await apiClient.post('/auth/login', credentials);
             return data;
         },
-        onSuccess: () => {
-            // Profile cache ko refresh karo taaki naya user data fetch ho jaye
+        onSuccess: (data) => {
+            const loggedInUser = data.user || data;
+            queryClient.setQueryData(['authUser'], loggedInUser);
             queryClient.invalidateQueries({ queryKey: ['authUser'] });
         }
     });
 
-    // --- 2. REGISTER ---
+    const updateProfile = useMutation({
+        mutationFn: async (payload) => {
+            const { data } = await apiClient.patch('/auth/update-profile', payload);
+            return data;
+        },
+        onSuccess: (response) => {
+            const updatedUser = response.user || response;
+            queryClient.setQueryData(['authUser'], updatedUser);
+            queryClient.invalidateQueries({ queryKey: ['authUser'] });
+        }
+    });
+
     const registerUser = useMutation({
         mutationFn: async (userData) => {
             const { data } = await apiClient.post('/auth/register', userData);
@@ -28,46 +70,27 @@ export const useAuth = () => {
 
     const resetPassword = useMutation({
         mutationFn: async (userData) => {
-            // userData mein { email, erpId, newPassword } hoga
             const { data } = await apiClient.post('/auth/reset-password', userData);
             return data;
         }
     });
 
-    // --- 3. GET PROFILE (ME) ---
-    // Ye hook '/auth/me' hit karega, browser automatically cookie sath bhejega
-    const useProfile = () => useQuery({
-        queryKey: ['authUser'],
-        queryFn: async () => {
-            const { data } = await apiClient.get('/auth/me');
-            return data;
-        },
-        staleTime: 1000 * 60 * 15, // 15 minutes cache
-        retry: false, // Unauthorized hone par baar-baar hit mat karo
-    });
-
-    // --- 4. LOGOUT ---
-    const logoutUser = useMutation({
-        mutationFn: async () => {
-            await apiClient.post('/auth/logout');
-        },
-        onSuccess: () => {
-            // Pura cache saaf kar do taaki purana user data na dikhe
-            queryClient.clear();
-            window.location.href = '/login';
-        }
-    });
-
     const verifyErp = useMutation({
         mutationFn: async (payload) => {
-            // payload mein { erpId, role } hoga
             const { data } = await apiClient.post('/auth/verify-erp', payload);
             return data;
         }
     });
 
-    return { loginUser, registerUser, useProfile, logoutUser, verifyErp,resetPassword };
+    return { 
+        user, 
+        isLoading, 
+        isError, 
+        loginUser, 
+        registerUser, 
+        logout, 
+        verifyErp, 
+        resetPassword, 
+        updateProfile 
+    };
 };
-
-
-
