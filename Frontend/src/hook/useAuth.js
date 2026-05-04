@@ -22,12 +22,12 @@ export const useAuth = () => {
 
     const logout = async () => {
         try {
-            // 1. Backend ko call karo
+            
             await apiClient.post('/auth/logout');
         } catch (err) {
             console.error("Logout API failed", err);
         } finally {
-            // 2. Clear everything manually
+            
             queryClient.clear();
             sessionStorage.clear();
             localStorage.clear();
