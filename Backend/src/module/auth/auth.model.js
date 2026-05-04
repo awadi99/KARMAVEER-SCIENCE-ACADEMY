@@ -14,6 +14,7 @@ const authSchema = new mongoose.Schema(
         },
         fullName: {
             type: String,
+            index:true,
             required: true,
             trim: true,
         },

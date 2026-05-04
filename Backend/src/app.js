@@ -3,7 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import authRoutes from "./module/auth/auth.router.js"
-// import userRoutes from "./modules/user/user.router.js";
+import userRoutes from './module/user/user.router.js';
+import testRoutes from './module/test/test.router.js';
 import passport from 'passport';
 import "./module/auth/google.strategy.js";
 
@@ -28,7 +29,8 @@ app.get("/",(req,res)=>{
 });
 
 app.use("/api/auth",authRoutes)
-// app.use("/api/users",userRoutes);
+app.use("/api/user",userRoutes);
+app.use("/api/test",testRoutes);
 
 
 
