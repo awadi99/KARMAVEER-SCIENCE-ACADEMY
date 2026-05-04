@@ -12,7 +12,6 @@ const Dashboard = lazy(() => import('./page/Dashboard'));
 const Student = lazy(() => import('./page/Student'));
 const ForgotPassword = lazy(() => import('./page/ForgotPassword'));
 const MainLayout = lazy(() => import('./layouts/MainLayout'));
-const FeePage = lazy(() => import('./page/FeePage'));
 const ProfilePage = lazy(() => import('./page/ProfilePage'));
 const TestPage = lazy(() => import('./page/TestPage'));
 
@@ -72,7 +71,7 @@ export default function App() {
                 {isAdmin && (
                   <>
                     <Route path="students" element={<Student />} />
-                    <Route path="fees" element={<FeePage />} />
+                    
                   </>
                 )}
                 

@@ -30,12 +30,7 @@ export const navItems = [
         icon: FileText,
         roles: ["admin", "student"], 
     },
-    {
-        name: "Fees",
-        path: "/dashboard/fees",
-        icon: IndianRupee,
-        roles: ["admin"], 
-    },
+
     {
         name: "Profile",
         path: "/dashboard/profile",
