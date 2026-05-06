@@ -12,8 +12,8 @@ const SOCIAL_LINKS = [
 
 const EXPLORE_LINKS = [
     { name: 'Home', path: '/' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Test Series', path: '/tests' },
+    { name: 'Dashboard', path: '/register' },
+    { name: 'Test Series', path: '/register' },
 ];
 
 export default function Footer() {
