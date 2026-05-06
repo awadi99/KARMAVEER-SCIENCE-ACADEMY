@@ -1,132 +1,90 @@
-import User from "../auth/auth.model.js";
-import { Question} from "../test/test.model.js";
-import { Result } from "./test.result.model.js";
+import { Test, Question, Result } from './test.model.js';
+import User from '../auth/auth.model.js';
+import redisClient from '../../config/redis.js';
 
 export const uploadQuestionSet = async (req, res) => {
     try {
         const { testTitle, subject, standard, questions } = req.body;
+        const testId = `T-${Date.now()}`;
+        const stdNum = Number(standard);
 
-        // Validation
-        const count = questions?.length || 0;
-        if (count !== 20 && count !== 50) {
-            return res.status(400).json({ message: `Only 20 or 50 questions allowed. Got: ${count}` });
-        }
-
-        // Generating missing fields manually if frontend isn't sending them
-        const generatedTestId = `TEST-${Date.now()}`;
-        const finalDate = new Date(); // Using current date if testDate is invalid
-
-        const cleanData = questions.map(q => ({
-            testId: generatedTestId, 
-            testTitle: testTitle || "Untitled Test", 
-            testDate: finalDate,
-            standard: Number(standard) || 0,
-            subject: subject || "General",
-            qText: q.question ? q.question.trim() : "Empty Question", 
-            options: q.options || ["", "", "", ""],
-            correctIdx: Number(q.correct) || 0, 
-            marks: 1
-        }));
-
-        await Question.insertMany(cleanData, { ordered: true });
-        
-        res.status(201).json({ 
-            success: true, 
-            message: `Set of ${count} uploaded successfully.`,
-            testId: generatedTestId 
+        const correctAnswers = [];
+        const cleanQuestions = questions.map(q => {
+            const correct = Number(q.correct);
+            correctAnswers.push(correct);
+            return {
+                testId,
+                qText: q.question.trim(),
+                options: q.options,
+                correctIdx: correct
+            };
         });
 
+        // 🚀 FIXED: Upstash/Modern Redis compatible syntax
+        await Promise.all([
+            Test.create({ testId, testTitle, subject, standard: stdNum, totalQuestions: questions.length }),
+            Question.insertMany(cleanQuestions, { ordered: false }),
+            redisClient.set(`ans:${testId}`, JSON.stringify(correctAnswers), { ex: 86400 }) 
+        ]);
+
+        res.status(201).json({ success: true, testId });
     } catch (error) {
-        console.error("Detailed Upload Error:", error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Database Validation Failed", 
-            error: error.message 
-        });
+        console.error("Upload Error:", error);
+        res.status(500).json({ success: false, error: error.message });
     }
 };
+
+export const submitTest = async (req, res) => {
+    try {
+        const { testId, answers } = req.body;
+        const studentId = req.user._id.toString();
+
+        const cachedAns = await redisClient.get(`ans:${testId}`);
+        if (!cachedAns) return res.status(404).json({ message: "Test not found" });
+        
+        const correctAns = typeof cachedAns === 'string' ? JSON.parse(cachedAns) : cachedAns;
+
+        let score = 0;
+        for (let i = 0; i < correctAns.length; i++) {
+            if (Number(answers[i]) === Number(correctAns[i])) score++;
+        }
+        const status = (score / correctAns.length) >= 0.33 ? 'Pass' : 'Fail';
+
+        // Background Task
+        Promise.all([
+            redisClient.sadd(`done:${testId}`, studentId),
+            Result.findOneAndUpdate(
+                { testId, studentId },
+                { score, totalMarks: correctAns.length, status, standard: req.user.standard },
+                { upsert: true, lean: true }
+            ).exec()
+        ]).catch(err => console.error("Sync Error:", err));
+
+        res.status(200).json({ success: true, score, status });
+    } catch (error) {
+        res.status(503).json({ message: "Server Busy" });
+    }
+};
+
 export const getAdminStats = async (req, res) => {
     try {
         const { testId, standard } = req.query;
+        const attemptedIds = await redisClient.smembers(`done:${testId}`);
 
-        // Parallel processing for performance
         const [allStudents, testResults] = await Promise.all([
-            User.find({ standard, role: 'student' }).select('_id fullName email').lean(),
-            Result.find({ testId, standard }).select('studentId score totalMarks status').lean()
+            User.find({ standard: Number(standard), role: 'student' }).select('_id fullName email').lean(),
+            Result.find({ testId }).select('studentId score status').lean()
         ]);
 
-        const attendedIds = new Set(testResults.map(r => r.studentId.toString()));
+        const attemptedSet = new Set(attemptedIds);
+        const absentList = allStudents.filter(s => !attemptedSet.has(s._id.toString()));
 
-        // Fast filtering
-        const absentList = allStudents.filter(s => !attendedIds.has(s._id.toString()));
-        const failedList = testResults.filter(r => r.status === 'Fail');
-
-        res.json({
-            stats: {
-                total: allStudents.length,
-                present: attendedIds.size,
-                absent: absentList.length,
-                failed: failedList.length
-            },
+        res.status(200).json({
+            stats: { total: allStudents.length, attended: testResults.length, absent: absentList.length },
             absentList,
-            failedList
+            resultList: testResults
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-export const getSchedules = async (req, res) => {
-    try {
-        const schedules = await Test.find()
-            .sort({ createdAt: -1 })
-            .select('title subject standard totalQuestions createdAt');
-
-        if (!schedules || schedules.length === 0) {
-            return res.status(200).json({
-                success: true,
-                data: []
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            data: schedules
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-};
-
-// 3. SUBMIT TEST (Calculates Pass/Fail instantly)
-export const submitTest = async (req, res) => {
-    try {
-        const { testId, answers } = req.body; // answers: [{qId, selectedIdx}]
-        const studentId = req.user._id;
-
-        // Fetch correct answers (Projection used for speed)
-        const questions = await Question.find({ testId }).select('correctIdx').lean();
-        
-        let score = 0;
-        questions.forEach((q, index) => {
-            if (answers[index]?.selectedIdx === q.correctIdx) score++;
-        });
-
-        const totalMarks = questions.length;
-        const status = (score / totalMarks) >= 0.33 ? 'Pass' : 'Fail';
-
-        const result = await Result.findOneAndUpdate(
-            { testId, studentId },
-            { score, totalMarks, status, standard: req.user.standard },
-            { upsert: true, new: true }
-        );
-
-        res.json({ success: true, score, status });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 };

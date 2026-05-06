@@ -1,10 +1,24 @@
 import express from 'express';
 const router = express.Router();
-import { uploadQuestionSet, getAdminStats, getSchedules } from './test.controller.js';
 
 
-router.post('/upload-set', uploadQuestionSet);
-router.get('/stats', getAdminStats);
-router.get('/schedules', getSchedules);
+import { 
+    uploadQuestionSet, 
+    submitTest, 
+    getAdminStats 
+} from './test.controller.js';
+
+
+import { protect, adminOnly } from '../../middlewares/auth.middleware.js';
+
+
+
+router.post('/upload-set', protect, adminOnly, uploadQuestionSet);
+
+
+router.post('/submit', protect, submitTest);
+
+
+router.get('/stats', protect, adminOnly, getAdminStats);
 
 export default router;
