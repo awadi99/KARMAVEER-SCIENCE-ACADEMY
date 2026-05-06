@@ -5,63 +5,55 @@ import { toast } from 'react-toastify';
 export const useTest = () => {
     const queryClient = useQueryClient();
 
-    // 1. UPLOAD TEST (Mutation)
+    
     const uploadTest = useMutation({
         mutationFn: async (payload) => {
             const { data } = await apiClient.post('/test/upload-set', payload);
             return data;
         },
-        onSuccess: (data) => {
-            toast.success(data.message || "Questions Uploaded!");
-            // Purane stats ya schedules ko invalidate karein taaki data refresh ho jaye
-            queryClient.invalidateQueries({ queryKey: ['testSchedules'] });
+        onSuccess: () => {
+            toast.success("Test Questions Uploaded Successfully!");
+            
+            queryClient.invalidateQueries({ queryKey: ['testStats'] });
         },
         onError: (err) => {
-            const errorMsg = err.response?.data?.message || "Upload Failed";
-            toast.error(errorMsg);
+            toast.error(err.response?.data?.message || "Upload Failed");
         }
     });
-    // 2. GET TEST STATS (Fail/Absent Logic)
+
+
+    const submitResult = useMutation({
+        mutationFn: async (payload) => {
+            // payload example: { testId: "T-123", answers: [0, 2, 1] }
+            const { data } = await apiClient.post('/test/submit', payload);
+            return data;
+        },
+        onSuccess: (data) => {
+            toast.success(`Submitted! Your Score: ${data.score}`);
+        },
+        onError: (err) => {
+            toast.error(err.response?.data?.message || "Submission Error");
+        }
+    });
+
+
     const getStats = (testId, standard) => {
         return useQuery({
             queryKey: ['testStats', testId, standard],
             queryFn: async () => {
-                const { data } = await apiClient.get(`/questions/stats`, {
+                const { data } = await apiClient.get('/test/stats', {
                     params: { testId, standard }
                 });
                 return data;
             },
-            enabled: !!testId && !!standard, // Jab tak ID na ho, call mat karo
-            staleTime: 1000 * 60 * 5, // 5 minutes cache
+            enabled: !!testId && !!standard, // Safety check
+            staleTime: 1000 * 60 * 2, // 2 minutes cache is enough for live results
         });
     };
 
-    // 3. GET ALL SCHEDULED TESTS (Admin View)
-    const { data: schedules, isLoading: loadingSchedules } = useQuery({
-        queryKey: ['testSchedules'],
-        queryFn: async () => {
-            const { data } = await apiClient.get('/test/schedules');
-            return data;
-        },
-        staleTime: 1000 * 60 * 10,
-    });
-
-    // 4. SUBMIT STUDENT ANSWERS
-    const submitResult = useMutation({
-        mutationFn: async (payload) => {
-            const { data } = await apiClient.post('/test/submit', payload);
-            return data;
-        },
-        onSuccess: () => {
-            toast.success("Test Submitted Successfully!");
-        }
-    });
-
     return {
         uploadTest,
-        getStats,
-        schedules,
-        loadingSchedules,
-        submitResult
+        submitResult,
+        getStats
     };
 };
