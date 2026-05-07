@@ -4,7 +4,7 @@ import SmoothScroll from './components/scroll/SmoothScroll';
 import { ToastContainer, Flip } from 'react-toastify';
 import { useAuth } from './hook/useAuth';
 
-// Lazy Loading components for better performance
+// Lazy Loading components
 const LandingPage = lazy(() => import('./page/LandingPage'));
 const Register = lazy(() => import('./page/Register'));
 const Login = lazy(() => import('./page/Login'));
@@ -15,10 +15,13 @@ const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const ProfilePage = lazy(() => import('./page/ProfilePage'));
 const TestPage = lazy(() => import('./page/TestPage'));
 
+
+const TestExecution = lazy(() => import('./components/test/TestExecution'));
+
 export default function App() {
   const { user, isLoading } = useAuth();
 
-  // --- 1. Theme Logic (Persistent) ---
+  // --- 1. Theme Logic ---
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('theme');
     return saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -29,10 +32,9 @@ export default function App() {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
-  // --- 2. Auth Role Check (Memoized for optimization) ---
+  // --- 2. Auth Role Check ---
   const isAdmin = useMemo(() => user?.role === 'admin', [user]);
 
-  // --- 3. Loading State (Prevents flicker during auth check) ---
   if (isLoading) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-[#020205]">
@@ -49,7 +51,7 @@ export default function App() {
         <div className="min-h-screen bg-slate-50 dark:bg-[#020205] text-slate-900 dark:text-slate-100 transition-colors duration-300">
           <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-[#020205]" />}>
             <Routes>
-              {/* --- Public Routes --- */}
+              
               <Route path='/' element={<LandingPage isDark={isDark} setIsDark={setIsDark} />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
@@ -63,23 +65,24 @@ export default function App() {
                   isAdmin ? <Dashboard /> : <Navigate to="/dashboard/tests" replace />
                 } />
 
-
+                
                 <Route path="tests" element={<TestPage />} />
                 <Route path="profile" element={<ProfilePage />} />
 
-                
+
+                <Route path="practice/:testId" element={<TestExecution />} />
+
+
                 {isAdmin && (
                   <>
                     <Route path="students" element={<Student />} />
-                    
+
                   </>
                 )}
                 
-                {/* Catch-all within dashboard */}
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Route>
 
-              {/* Global Catch-all redirect to Landing */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>

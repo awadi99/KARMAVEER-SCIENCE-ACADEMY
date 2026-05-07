@@ -1,25 +1,11 @@
 import React, { memo } from 'react';
 import { CheckCircle2, AlertCircle, Bell, UserMinus, MoreVertical, GraduationCap } from 'lucide-react';
 
-const PASS_DATA = [
-    { id: 1, name: "Arjun Mehta", subject: "Mathematics", score: "92%", status: "Pass" },
-    { id: 2, name: "Sneha Patil", subject: "Physics", score: "88%", status: "Pass" },
-    { id: 3, name: "Rahul Vichare", subject: "Chemistry", score: "34%", status: "Fail" },
-];
-
-const PENDING_DATA = [
-    { id: 101, name: "Ananya Iyer", roll: "A-12" },
-    { id: 102, name: "Ishaan Shah", roll: "A-15" },
-];
-
-const RecentResults = memo(() => {
+const RecentResults = memo(({ resultList = [], absentList = [] }) => {
     return (
-        /* - transform-gpu: Keeps the entire section on the GPU layer for zero-lag scrolling.
-           - isolate: Prevents table updates from triggering global page repaints.
-        */
         <div className="w-full grid grid-cols-1 xl:grid-cols-3 gap-6 mt-8 transform-gpu isolate">
             
-            {/* LEFT SIDE: Recent Results (Academic List) */}
+            {/* LEFT SIDE: Recent Results (Real Data from Backend) */}
             <div className="xl:col-span-2 bg-white dark:bg-[#0F172A] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
                 <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.01]">
                     <div className="flex items-center gap-3">
@@ -32,27 +18,26 @@ const RecentResults = memo(() => {
                 </div>
 
                 <div className="p-4 overflow-x-auto no-scrollbar">
-                    {/* Header Row */}
                     <div className="flex items-center px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-50 dark:border-slate-800 mb-2">
                         <span className="flex-1">Student</span>
-                        <span className="flex-1 hidden md:block">Subject</span>
-                        <span className="w-20 text-center">Score</span>
+                        <span className="flex-1 hidden md:block">Score Details</span>
+                        <span className="w-20 text-center">Marks</span>
                         <span className="w-24 text-right">Status</span>
                     </div>
 
-                    {/* Content Rows: Using Flex instead of Table for better mobile reflow */}
                     <div className="space-y-2">
-                        {PASS_DATA.map((item) => (
-                            <div key={item.id} 
+                        {resultList.length > 0 ? resultList.map((item) => (
+                            <div key={item._id} 
                                 className="flex items-center px-4 py-4 rounded-xl border border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-all group pointer-events-auto"
                                 style={{ contain: 'content' }}
                             >
                                 <div className="flex-1">
-                                    <p className="text-xs font-bold text-slate-900 dark:text-slate-200">{item.name}</p>
-                                    <p className="text-[10px] text-slate-400 md:hidden mt-0.5">{item.subject}</p>
+                                    {/* Backend User reference se name fetch ho raha hai */}
+                                    <p className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate">{item.studentId?.fullName || "Student"}</p>
+                                    <p className="text-[10px] text-slate-400 md:hidden mt-0.5">Std {item.standard}</p>
                                 </div>
                                 <div className="flex-1 hidden md:block">
-                                    <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">{item.subject}</span>
+                                    <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">Total Qs: {item.totalMarks}</span>
                                 </div>
                                 <div className="w-20 text-center">
                                     <span className={`text-xs font-bold ${item.status === 'Pass' ? 'text-blue-600' : 'text-red-500'}`}>
@@ -70,12 +55,14 @@ const RecentResults = memo(() => {
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                        )) : (
+                            <div className="p-10 text-center text-[10px] font-bold text-slate-400 uppercase">No Submissions Found</div>
+                        )}
                     </div>
                 </div>
             </div>
 
-            {/* RIGHT SIDE: Pending (Class Action Items) */}
+            {/* RIGHT SIDE: Pending (Absent Students from Backend) */}
             <div className="bg-white dark:bg-[#0F172A] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 flex flex-col">
                 <div className="flex items-center gap-3 mb-8">
                     <div className="h-10 w-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-600">
@@ -83,31 +70,33 @@ const RecentResults = memo(() => {
                     </div>
                     <div>
                         <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">Missing Submissions</h3>
-                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Pending Exams</p>
+                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Pending Exams ({absentList.length})</p>
                     </div>
                 </div>
 
-                <div className="space-y-4 flex-1">
-                    {PENDING_DATA.map((student) => (
-                        <div key={student.id} 
+                <div className="space-y-4 flex-1 overflow-y-auto custom-scroll">
+                    {absentList.length > 0 ? absentList.map((student) => (
+                        <div key={student._id} 
                             className="flex items-center justify-between p-4 rounded-xl border border-slate-100 dark:border-slate-800 group hover:border-blue-500/30 transition-all transform-gpu"
                             style={{ contain: 'layout' }}
                         >
-                            <div className="min-w-0">
-                                <p className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate">{student.name}</p>
-                                <p className="text-[10px] font-medium text-slate-400 mt-0.5">ID: {student.roll}</p>
+                            <div className="min-w-0 pr-2">
+                                <p className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate">{student.fullName}</p>
+                                <p className="text-[10px] font-medium text-slate-400 mt-0.5 truncate">{student.email}</p>
                             </div>
-                            <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold uppercase transition-all active:scale-95 shadow-lg shadow-blue-600/10">
+                            <button className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold uppercase transition-all active:scale-95 shadow-lg shadow-blue-600/10">
                                 <Bell size={10} />
                                 Remind
                             </button>
                         </div>
-                    ))}
+                    )) : (
+                        <div className="p-10 text-center text-[10px] font-bold text-slate-400 uppercase">All students attended!</div>
+                    )}
                 </div>
                 
                 <div className="mt-8 pt-6 border-t border-slate-50 dark:border-slate-800">
                     <button className="w-full py-2.5 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest hover:text-blue-600 transition-colors">
-                        View All Pending
+                        Sync Absent Records
                     </button>
                 </div>
             </div>
@@ -117,5 +106,4 @@ const RecentResults = memo(() => {
 });
 
 RecentResults.displayName = 'RecentResults';
-
 export default RecentResults;
