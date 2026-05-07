@@ -2,37 +2,40 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import compression from 'compression'; // 🚀 Added for speed
+import passport from 'passport';
+
 import authRoutes from "./module/auth/auth.router.js"
 import userRoutes from './module/user/user.router.js';
 import testRoutes from './module/test/test.router.js';
-import passport from 'passport';
 import "./module/auth/google.strategy.js";
-
 
 const app = express();
 
+app.use(compression()); 
+
 app.use(cors({
-    origin:process.env.CLIENT_URL,
-    credentials:true,
+    origin: process.env.CLIENT_URL,
+    credentials: true,
 }));
+
 app.use(helmet({
     crossOriginOpenerPolicy: false,
 }));
-app.use(express.urlencoded({extended:true}));
-app.use(express.json())
-app.use(cookieParser());
 
+app.use(express.json({ limit: '50kb' })); 
+app.use(express.urlencoded({ extended: true, limit: '50kb' }));
+
+app.use(cookieParser());
 app.use(passport.initialize());
 
-app.get("/",(req,res)=>{
-    res.send("api is running");
+
+app.get("/", (req, res) => {
+    res.send("API is running optimized for 1000+ students 🚀");
 });
 
-app.use("/api/auth",authRoutes)
-app.use("/api/user",userRoutes);
-app.use("/api/test",testRoutes);
-
-
-
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/test", testRoutes);
 
 export default app;

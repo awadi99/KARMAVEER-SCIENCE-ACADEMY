@@ -13,6 +13,8 @@ const testSchema = new mongoose.Schema({
     testDate: { type: Date, default: Date.now }
 }, { timestamps: true, versionKey: false });
 
+testSchema.index({ standard: 1, subject: 1, createdAt: -1 });
+
 export const Test = mongoose.model('Test', testSchema);
 
 // question schema //
@@ -26,6 +28,9 @@ const questionSchema = new mongoose.Schema({
     correctIdx: { type: Number, required: true, min: 0, max: 3 }, // Index based
     marks: { type: Number, default: 1 }
 }, { versionKey: false });
+
+
+
 
 export const Question = mongoose.model('Question', questionSchema);
 
@@ -42,4 +47,5 @@ const resultSchema = new mongoose.Schema({
     submittedAt: { type: Date, default: Date.now }
 }, { versionKey: false });
 
+resultSchema.index({ testId: 1, studentId: 1 }, { unique: true });
 export const Result = mongoose.model('Result', resultSchema);
