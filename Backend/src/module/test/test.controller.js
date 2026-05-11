@@ -23,7 +23,7 @@ export const uploadQuestionSet = async (req, res) => {
         await Promise.all([
             Test.create({ testId, testTitle, subject, standard: stdNum, totalQuestions: questions.length }),
             Question.insertMany(cleanQuestions, { ordered: false }),
-            redisClient.set(`ans:${testId}`, JSON.stringify(correctAnswers), { ex: 86400 }) 
+            redisClient.set(`ans:${testId}`, JSON.stringify(correctAnswers), { ex: 7200 }) 
         ]);
 
         res.status(201).json({ success: true, testId });
@@ -37,24 +37,32 @@ export const uploadQuestionSet = async (req, res) => {
 export const getTestsForStudent = async (req, res) => {
     try {
         const { standard } = req.user; 
-        const studentId = req.user._id.toString(); 
+        const studentId = req.user._id; 
         const { subject } = req.query; 
 
         let query = { standard: Number(standard) };
         if (subject) query.subject = subject;
 
-        const tests = await Test.find(query)
-            .select('testId testTitle subject totalQuestions createdAt')
-            .sort({ createdAt: -1 })
-            .lean();
+        
+        const [tests, userResults] = await Promise.all([
+            Test.find(query)
+                .select('testId testTitle subject totalQuestions createdAt')
+                .sort({ createdAt: -1 })
+                .lean(),
+            
+            
+            Result.find({ studentId })
+                .select('testId -_id')
+                .lean()
+        ]);
 
         
-        const testsWithStatus = await Promise.all(tests.map(async (test) => {
-            const isCompleted = await redisClient.sIsMember(`done:${test.testId}`, studentId);
-            return { 
-                ...test, 
-                isCompleted: !!isCompleted // Ye frontend ko batayega ki indicator dikhana hai
-            };
+        const completedTestIdsSet = new Set(userResults.map(r => r.testId));
+
+        
+        const testsWithStatus = tests.map(test => ({
+            ...test,
+            isCompleted: completedTestIdsSet.has(test.testId)
         }));
 
         res.status(200).json({ 
@@ -63,22 +71,43 @@ export const getTestsForStudent = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Indicator Logic Error:", error);
         res.status(500).json({ success: false, message: "Error fetching tests" });
     }
 };
+
+
+
+
 export const submitTest = async (req, res) => {
     try {
-        const { testId, answers, type } = req.body; 
+        const { testId, answers } = req.body; 
         const studentId = req.user._id.toString();
 
         
-        // const hasSubmitted = await redisClient.sIsMember(`done:${testId}`, studentId);
-        // if (hasSubmitted) return res.status(400).json({ message: "Submission already recorded" });
-
-
         const cachedKey = await redisClient.get(`ans:${testId}`);
-        if (!cachedKey) return res.status(404).json({ message: "Test key expired" });
-        const correctAns = JSON.parse(cachedKey);
+        let correctAns;
+
+        if (!cachedKey) {
+
+            console.log("Loading ...");
+            const questions = await Question.find({testId})
+            .select('correctIdx')
+            .sort({_id:1})
+            .lean();
+
+            if (!questions.length) {
+                return res.status(404).json({ message: "Test records not found" });
+            }
+            correctAns = questions.map(q => q.correctIdx);
+
+            await redisClient.set(`ans:${testId}`, JSON.stringify(correctAns), { ex: 7200 });
+        }
+
+        else{
+
+            correctAns = JSON.parse(cachedKey);
+        }
 
         let score = 0;
         for (let i = 0; i < correctAns.length; i++) {
@@ -99,6 +128,7 @@ export const submitTest = async (req, res) => {
             try {
                 await Promise.all([
                     redisClient.sAdd(`done:${testId}`, studentId), 
+                    redisClient.expire(`done:${testId}`, 7200),
                     Result.findOneAndUpdate(
                         { testId, studentId },
                         { 
@@ -110,7 +140,7 @@ export const submitTest = async (req, res) => {
                     )
                 ]);
             } catch (dbErr) {
-                await redisClient.set(`backup:${testId}:${studentId}`, JSON.stringify(answers), { ex: 86400 });
+                await redisClient.set(`backup:${testId}:${studentId}`, JSON.stringify(answers), { ex: 7200 });
                 console.error("DB Write Failed, Backup saved to Redis:", dbErr);
             }
         });
@@ -121,29 +151,101 @@ export const submitTest = async (req, res) => {
     }
 };
 
+
+
 export const getAdminStats = async (req, res) => {
     try {
-        const { testId, standard } = req.query;
-        const attemptedIds = await redisClient.sMembers(`done:${testId}`);
+        const { testTitle, standard } = req.query;
 
-        const [allStudents, testResults] = await Promise.all([
-            User.find({ standard: Number(standard), role: 'student' }).select('_id fullName email').lean(),
-            Result.find({ testId }).select('studentId score status').lean()
+        if (!testTitle?.trim()) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Examination title is required for processing." 
+            });
+        }
+
+        const stdNum = Number(standard);
+
+        const testRecord = await Test.findOne({
+            standard: stdNum,
+            testTitle: { $regex: testTitle.trim(), $options: 'i' }
+        }).select('testId testTitle').lean();
+
+        if (!testRecord) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "No matching examination record found." 
+            });
+        }
+
+        const targetId = String(testRecord.testId).trim();
+
+        const presentList = await Result.aggregate([
+            { 
+                $match: { testId: targetId } 
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "studentId",
+                    foreignField: "_id",
+                    as: "studentDetails"
+                }
+            },
+            { $unwind: "$studentDetails" },
+            {
+                $project: {
+                    _id: 1,
+                    score: 1,
+                    totalMarks: 1,
+                    status: 1,
+                    submittedAt: 1,
+                    studentId: {
+                        _id: "$studentDetails._id",
+                        fullName: "$studentDetails.fullName",
+                        email: "$studentDetails.email",
+                        erpId: "$studentDetails.erpId",
+                        profilePic: "$studentDetails.profilePic"
+                    }
+                }
+            },
+            { $sort: { submittedAt: -1 } }
         ]);
 
-        const attemptedSet = new Set(attemptedIds);
-        const absentList = allStudents.filter(s => !attemptedSet.has(s._id.toString()));
+        const allStudentsInStandard = await User.find({
+            standard: stdNum,
+            role: 'student'
+        }).select('_id erpId fullName email profilePic').lean();
 
-        res.status(200).json({
-            stats: { total: allStudents.length, attended: testResults.length, absent: absentList.length },
+        const presentIdsSet = new Set(presentList.map(r => r.studentId._id.toString()));
+
+        const absentList = allStudentsInStandard.filter(student =>
+            !presentIdsSet.has(student._id.toString())
+        );
+
+        return res.status(200).json({
+            success: true,
+            testInfo: { 
+                title: testRecord.testTitle, 
+                id: testRecord.testId 
+            },
+            presentList,
             absentList,
-            resultList: testResults
+            summary: {
+                totalStudents: allStudentsInStandard.length,
+                presentCount: presentList.length,
+                absentCount: absentList.length
+            }
         });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error(`[AdminStats_Error]: ${error.message}`);
+        return res.status(500).json({ 
+            success: false, 
+            message: "An internal server error occurred during analytics generation." 
+        });
     }
 };
-
 
 export const getPracticeQuestions = async (req, res) => {
     try {
@@ -163,7 +265,7 @@ export const getPracticeQuestions = async (req, res) => {
         const response = { success: true, questions };
         
 
-        await redisClient.set(`q:${testId}`, JSON.stringify(response), { ex: 86400 });
+        await redisClient.set(`q:${testId}`, JSON.stringify(response), { ex: 7200 });
 
         res.status(200).json(response);
     } catch (error) {
