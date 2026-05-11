@@ -65,20 +65,27 @@ export const useTest = () => {
         }
     });
 
-    const getStats = (testId, standard) => {
+    const getStats = (testTitle, standard) => {
         return useQuery({
-            queryKey: ['testStats', testId, standard],
+            // Query key mein parameters daalna zaroori hai cache invalidation ke liye
+            queryKey: ['testStats', testTitle, standard],
             queryFn: async () => {
-                const { data } = await apiClient.get('/test/stats', {
-                    params: { testId, standard }
-                });
-                return data;
+                try {
+                    const { data } = await apiClient.get('/test/stats', {
+                        params: { testTitle, standard } 
+                    });
+                    return data;
+                } catch (error) {
+                    // Agar backend 404 ya 500 deta hai toh yahan handle hoga
+                    throw new Error(error.response?.data?.message || "Data fetch karne mein error aayi");
+                }
             },
-            enabled: !!testId && !!standard,
-            staleTime: 1000 * 60 * 2,
+            // Jab tak dono values na ho, request nahi jayegi
+            enabled: !!testTitle && !!standard,
+            staleTime: 1000 * 60 * 5, // 5 minute tak data fresh rahega
+            retry: 1, // Fail hone par sirf ek baar dobara try karega
         });
     };
-
     return {
         uploadTest,
         useStudentTests, 

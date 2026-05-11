@@ -8,21 +8,18 @@ import ControlPanel from './ControlPanel';
 export default function QuestionCreator({ subject, maxLimit }) {
     const [testTitle, setTestTitle] = useState('');
     const [selectedStandard, setSelectedStandard] = useState('11');
+    const [targetSet, setTargetSet] = useState(20); // 🎯 State for 20 or 50 set
     const [questions, setQuestions] = useState([
         { id: Date.now(), question: '', options: ['', '', '', ''], correct: 0 }
     ]);
 
     const { uploadTest } = useTest();
-    const MILESTONES = [20, 50];
     const standards = ['11', '12'];
     const currentCount = questions.length;
     
-    const canSave = useMemo(() => MILESTONES.includes(currentCount), [currentCount]);
-    const nextGoal = useMemo(() => {
-        if (currentCount < 20) return 20;
-        if (currentCount < 50) return 50;
-        return null;
-    }, [currentCount]);
+    // Logic: Ab save tabhi hoga jab count exact targetSet (20 ya 50) ke barabar ho
+    const canSave = useMemo(() => currentCount === targetSet, [currentCount, targetSet]);
+    const nextGoal = targetSet;
 
     const handleSmartPaste = useCallback((qId, question, options) => {
         setQuestions(prev => prev.map(q => 
@@ -43,13 +40,16 @@ export default function QuestionCreator({ subject, maxLimit }) {
     }, []);
 
     const addQuestion = useCallback(() => {
-        if (currentCount < maxLimit) {
+        // Limit check based on selected toggle (20 or 50)
+        if (currentCount < targetSet) {
             setQuestions(prev => [...prev, { id: Date.now(), question: '', options: ['', '', '', ''], correct: 0 }]);
             setTimeout(() => {
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             }, 50);
+        } else {
+            alert(`Bhai, aapne ${targetSet} questions ka set select kiya hai. Limit reach ho gayi!`);
         }
-    }, [currentCount, maxLimit]);
+    }, [currentCount, targetSet]);
 
     const removeQuestion = useCallback((id) => {
         if (questions.length > 1) {
@@ -63,7 +63,7 @@ export default function QuestionCreator({ subject, maxLimit }) {
             return;
         }
         if (!canSave) {
-            alert(`Incomplete Milestone: Need ${nextGoal} questions.`);
+            alert(`Incomplete Set: Please add ${targetSet - currentCount} more questions.`);
             return;
         }
         const isFormIncomplete = questions.some(q => !q.question.trim() || q.options.some(opt => !opt.trim()));
@@ -130,12 +130,15 @@ export default function QuestionCreator({ subject, maxLimit }) {
                 </div>
             </div>
 
+            {/* Passing toggle state to Header */}
             <MilestoneHeader 
                 subject={subject} 
                 selectedStandard={selectedStandard} 
                 canSave={canSave} 
                 nextGoal={nextGoal} 
                 currentCount={currentCount} 
+                targetSet={targetSet}        // New Prop
+                setTargetSet={setTargetSet}  // New Prop
             />
 
             <div className="space-y-12 sm:space-y-16">
@@ -155,7 +158,7 @@ export default function QuestionCreator({ subject, maxLimit }) {
                 onAdd={addQuestion} 
                 onPublish={handleSubmit} 
                 currentCount={currentCount} 
-                maxLimit={maxLimit} 
+                maxLimit={targetSet} // Limit updated to current toggle
                 isPending={uploadTest.isPending} 
                 canSave={canSave} 
                 nextGoal={nextGoal} 
