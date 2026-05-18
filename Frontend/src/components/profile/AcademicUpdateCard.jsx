@@ -11,7 +11,7 @@ const SelectionButton = memo(({ label, isActive, onClick, disabled }) => (
         ${isActive 
             ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 scale-[1.02] border-transparent' 
             : 'bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
-        } disabled:opacity-40 disabled:scale-100 active:scale-95 transform-gpu`}
+        } disabled:opacity-40 disabled:scale-100 active:scale-[0.97] transform-gpu`}
         style={{ willChange: 'transform, opacity' }} 
     >
         <span className="flex items-center justify-center gap-2 text-xs sm:text-sm tracking-tight relative z-10">
@@ -23,19 +23,26 @@ const SelectionButton = memo(({ label, isActive, onClick, disabled }) => (
 
 export default function AcademicUpdateCard({ user }) {
     const { updateProfile } = useAuth();
-    const queryClient = useQueryClient(); // 2. Query Client initialize karein
+    const queryClient = useQueryClient(); 
     const [updatingField, setUpdatingField] = useState(null);
 
+
+    const hasStandard = !!user?.standard;
+    const hasStream = !!user?.stream;
+
     const handleUpdate = useCallback(async (field, value) => {
+        // Safety guards to completely freeze updates on already selected values
+        if (field === 'standard' && hasStandard) return;
+        if (field === 'stream' && hasStream) return;
         if (user?.[field] === value || updatingField) return;
 
         setUpdatingField(field);
         try {
-            // 3. MutateAsync ke saath response capture karein
+            
             const response = await updateProfile.mutateAsync({ [field]: value });
 
             /**
-             * 🔥 CRITICAL FIX: 
+             * CRITICAL FIX: 
              * 'authUser' wahi key honi chahiye jo aapne useAuth hook mein 
              * queryKey ke liye use ki hai. Ye cache update karte hi 
              * App.jsx ka ProfileGuard instantly unlock ho jayega.
@@ -49,7 +56,7 @@ export default function AcademicUpdateCard({ user }) {
         } finally {
             setUpdatingField(null);
         }
-    }, [user, updateProfile, updatingField, queryClient]);
+    }, [user, updateProfile, updatingField, queryClient, hasStandard, hasStream]);
 
     return (
         <div className="w-full bg-white dark:bg-slate-950 rounded-[2rem] border border-slate-200 dark:border-slate-900 p-5 sm:p-7 shadow-sm overflow-hidden transform-gpu transition-colors">
@@ -86,7 +93,8 @@ export default function AcademicUpdateCard({ user }) {
                                 label={`Class ${std}th`}
                                 isActive={user?.standard === std}
                                 onClick={() => handleUpdate('standard', std)}
-                                disabled={!!updatingField}
+                                
+                                disabled={!!updatingField || (hasStandard && user?.standard !== std)}
                             />
                         ))}
                     </div>
@@ -104,7 +112,8 @@ export default function AcademicUpdateCard({ user }) {
                                 label={stream}
                                 isActive={user?.stream === stream}
                                 onClick={() => handleUpdate('stream', stream)}
-                                disabled={!!updatingField}
+                                
+                                disabled={!!updatingField || (hasStream && user?.stream !== stream)}
                             />
                         ))}
                     </div>

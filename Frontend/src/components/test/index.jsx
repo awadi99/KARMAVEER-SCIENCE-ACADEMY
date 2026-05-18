@@ -4,11 +4,12 @@ import { useTest } from '../../hook/useTest.js';
 import QuestionCard from './QuestionCard';
 import MilestoneHeader from './MilestoneHeader';
 import ControlPanel from './ControlPanel';
+import { toast } from 'react-toastify';
 
 export default function QuestionCreator({ subject, maxLimit }) {
     const [testTitle, setTestTitle] = useState('');
     const [selectedStandard, setSelectedStandard] = useState('11');
-    const [targetSet, setTargetSet] = useState(20); // 🎯 State for 20 or 50 set
+    const [targetSet, setTargetSet] = useState(20); 
     const [questions, setQuestions] = useState([
         { id: Date.now(), question: '', options: ['', '', '', ''], correct: 0 }
     ]);
@@ -47,7 +48,7 @@ export default function QuestionCreator({ subject, maxLimit }) {
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             }, 50);
         } else {
-            alert(`Bhai, aapne ${targetSet} questions ka set select kiya hai. Limit reach ho gayi!`);
+            toast.error(`You have selected the ${targetSet} question set. The maximum limit has been reached.`)
         }
     }, [currentCount, targetSet]);
 
@@ -59,16 +60,16 @@ export default function QuestionCreator({ subject, maxLimit }) {
 
     const handleSubmit = async () => {
         if (!testTitle.trim() || testTitle.trim().length < 3) {
-            alert("Please enter a valid Test Title.");
+            toast.error("Please enter a valid Test Title.");
             return;
         }
         if (!canSave) {
-            alert(`Incomplete Set: Please add ${targetSet - currentCount} more questions.`);
+            toast.error(`Incomplete Set: Please add ${targetSet - currentCount} more questions.`);
             return;
         }
         const isFormIncomplete = questions.some(q => !q.question.trim() || q.options.some(opt => !opt.trim()));
         if (isFormIncomplete) {
-            alert("Please fill all questions and options.");
+            toast.error("Please fill all questions and options.");
             return;
         }
 
@@ -158,7 +159,7 @@ export default function QuestionCreator({ subject, maxLimit }) {
                 onAdd={addQuestion} 
                 onPublish={handleSubmit} 
                 currentCount={currentCount} 
-                maxLimit={targetSet} // Limit updated to current toggle
+                maxLimit={targetSet} 
                 isPending={uploadTest.isPending} 
                 canSave={canSave} 
                 nextGoal={nextGoal} 

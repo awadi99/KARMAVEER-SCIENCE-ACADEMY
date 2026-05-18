@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Send, Layout } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function QuesPaper({ testData, onFinish }) {
     const [currentIdx, setCurrentIdx] = useState(0);
@@ -10,7 +11,7 @@ export default function QuesPaper({ testData, onFinish }) {
         return saved ? JSON.parse(saved) : {};
     });
 
-    // 🚀 PERSIST: Har answer click par browser mein save karo
+  
     useEffect(() => {
         localStorage.setItem(`prac_${testData.testId}`, JSON.stringify(answers));
     }, [answers, testData.testId]);
@@ -20,6 +21,22 @@ export default function QuesPaper({ testData, onFinish }) {
     const handleSelect = useCallback((idx) => {
         setAnswers(prev => ({ ...prev, [currentQuestion._id || currentIdx]: idx }));
     }, [currentQuestion._id, currentIdx]);
+
+
+    const handleFinishTest = () => {
+        const unAttemptedQuestions = testData.questions.filter((q, i) => {
+            const key = q._id || i;
+            return answers[key] === undefined || answers[key] === null;
+        });
+
+        if (unAttemptedQuestions.length > 0) {
+            toast.error(`Test not completed! ${unAttemptedQuestions.length} questions are still unanswered. Please complete all questions before submitting.`);
+            return;
+        }
+
+        onFinish(answers);
+    };
+
 
     return (
         <div className="flex flex-col lg:flex-row gap-6 h-full max-h-[85vh] transform-gpu">
@@ -70,7 +87,7 @@ export default function QuesPaper({ testData, onFinish }) {
                     </button>
 
                     {currentIdx === testData.totalQuestions - 1 ? (
-                        <button onClick={() => onFinish(answers)} className="bg-green-600 hover:bg-green-700 text-white px-10 py-3 rounded-2xl font-black shadow-lg shadow-green-600/20 flex items-center gap-2 transition-all active:scale-95">
+                        <button onClick={handleFinishTest} className="bg-green-600 hover:bg-green-700 text-white px-10 py-3 rounded-2xl font-black shadow-lg shadow-green-600/20 flex items-center gap-2 transition-all active:scale-95">
                             FINISH TEST <Send size={16} />
                         </button>
                     ) : (
