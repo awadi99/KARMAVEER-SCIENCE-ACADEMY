@@ -59,10 +59,6 @@ export default function Features() {
   return (
     <section 
       id="features" 
-      /* FIX: added 'isolate' and forced a new stacking context.
-         This ensures the Navbar (which is usually z-50+) doesn't have to 
-         re-calculate this section while it sticks to the top.
-      */
       className="relative py-24 px-6 bg-[#F9FAFB] dark:bg-[#0F172A] overflow-hidden isolate"
       style={{ 
         contain: 'paint layout', 
