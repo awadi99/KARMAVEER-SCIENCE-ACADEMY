@@ -12,6 +12,8 @@ import "./module/auth/google.strategy.js";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(compression()); 
 
 app.use(cors({
