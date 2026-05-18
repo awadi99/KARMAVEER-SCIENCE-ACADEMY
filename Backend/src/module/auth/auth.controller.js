@@ -171,6 +171,8 @@ export const googleCallback = async (req, res) => {
             erpId: req.user.erpId
         }, res);
 
+        res.header("Access-Control-Allow-Credentials", "true");
+        res.header("Access-Control-Allow-Origin", "https://karmaveer-science-academy-53pt.vercel.app");
         
         const frontendUrl = "https://karmaveer-science-academy-53pt.vercel.app";
         let targetPath = "/dashboard"; 
@@ -182,7 +184,7 @@ export const googleCallback = async (req, res) => {
         }
 
         
-        res.redirect(`${frontendUrl}${targetPath}`);
+        return res.redirect(`${frontendUrl}${targetPath}`);
     }
     catch (error) {
         console.error("Google Callback Error:", error);
