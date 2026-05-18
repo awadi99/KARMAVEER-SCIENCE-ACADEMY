@@ -13,46 +13,38 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { AddLayout } from '../components/ui/AuthLayout.jsx';
 
-
 import loginSchema from '../schema/auth.login.schema.js';
 
 export default function Login() {
-
     const navigate = useNavigate();
     const { loginUser } = useAuth();
-
 
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
     } = useForm({
-        // Using your existing schema here
         resolver: zodResolver(loginSchema),
         mode: "onTouched",
     });
-
-
 
     const handleGoogleLogin = () => {
         window.location.href = `${import.meta.env.VITE_API_BASE_URL}/auth/google`;
     };
 
-
     const onSubmit = (data) => {
         loginUser.mutate(data, {
             onSuccess: (res) => {
                 toast.success(res.message || "Welcome back!");
-                const user = res.user || res; // Backend response structure ke hisaab se
+                const user = res.user || res; 
 
-            if (user.role === 'admin') {
-                navigate('/dashboard');
-            } else if (user.standard && user.stream) {
-                navigate('/dashboard');
-            } else {
-                navigate('/dashboard/profile');
-            }
-                
+                if (user.role === 'admin') {
+                    navigate('/dashboard');
+                } else if (user.standard && user.stream) {
+                    navigate('/dashboard');
+                } else {
+                    navigate('/dashboard/profile');
+                }
             },
             onError: (err) => {
                 toast.error(err.response?.data?.message || "Invalid email or password");
@@ -60,26 +52,24 @@ export default function Login() {
         });
     };
 
-
-
-
     return (
         <AddLayout
             title="Welcome Back"
             subtitle="Access your KSA Learning Dashboard"
         >
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 transform-gpu">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 transform-gpu text-slate-900 dark:text-white">
 
-                {/* Email Field - Uses your regex validation */}
+                {/* Email Field - Adaptive colors for cross-theme visibility */}
                 <Input
                     label="Email Address"
                     type="email"
                     placeholder="student@scienceacademy.com"
                     error={errors.email?.message}
                     {...register("email")}
+                    className="bg-slate-50 dark:bg-slate-900/60 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800"
                 />
 
-                {/* Password Field - Uses your strength regex */}
+                {/* Password Field */}
                 <div className="space-y-1">
                     <Input
                         label="Password"
@@ -87,11 +77,12 @@ export default function Login() {
                         placeholder="••••••••"
                         error={errors.password?.message}
                         {...register("password")}
+                        className="bg-slate-50 dark:bg-slate-900/60 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800"
                     />
                     <div className="flex justify-end px-1">
                         <Link
                             to="/forgot-password"
-                            className="text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:text-violet-400 transition-colors"
+                            className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                         >
                             Forgot Password?
                         </Link>
@@ -99,37 +90,38 @@ export default function Login() {
                 </div>
 
                 <div className="space-y-4 pt-2">
+                    {/* Submit Button - Connected to the primary academic blue scheme */}
                     <Button
                         type="submit"
                         loading={isSubmitting}
-                        className="w-full py-4 shadow-xl shadow-violet-600/20"
+                        className="w-full py-4 bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500 text-white shadow-md shadow-blue-600/10 transition-all duration-500"
                     >
                         {loginUser.isPending ? "Loading..." : "Sign In"}  <LogIn size={16} className="ml-2" />
                     </Button>
 
                     <div className="relative flex items-center py-2">
-                        <div className="flex-grow border-t border-white/5"></div>
-                        <span className="flex-shrink mx-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">
+                        <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+                        <span className="flex-shrink mx-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
                             Or connect via
                         </span>
-                        <div className="flex-grow border-t border-white/5"></div>
+                        <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
                     </div>
 
-                    {/* Google Login Button */}
+                    {/* Google Login Button - Flat theme alignment */}
                     <button
                         type="button"
                         onClick={handleGoogleLogin}
                         className="group w-full flex items-center justify-center gap-3 px-4 py-3.5 
-                        bg-white/5 border border-white/10 rounded-xl transition-all duration-300
-                        hover:bg-white/[0.08] hover:border-white/20 active:scale-[0.98] transform-gpu"
+                        bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl transition-all duration-300
+                        hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:border-slate-300 dark:hover:border-slate-700 active:scale-[0.98] transform-gpu"
                     >
                         <svg className="w-5 h-5" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                        </svg>
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-300">
+                           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                           <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                           <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+                           <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                       </svg>
+                        <span className="text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
                             Google Account
                         </span>
                     </button>
@@ -137,11 +129,11 @@ export default function Login() {
 
                 {/* Redirect back to Register */}
                 <div className="text-center mt-6">
-                    <p className="text-slate-400 text-xs font-medium">
+                    <p className="text-slate-400 dark:text-slate-500 text-sm font-medium tracking-tight">
                         Don't have an account?{' '}
                         <Link
                             to="/register"
-                            className="text-violet-400 hover:text-violet-300 font-bold transition-all duration-200 underline-offset-4 hover:underline"
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-bold transition-all duration-200 underline-offset-4 hover:underline"
                         >
                             Register
                         </Link>

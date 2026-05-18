@@ -6,8 +6,8 @@ import { Mail, MapPin, Phone, Send, Code2, Award } from "lucide-react";
 const SOCIAL_LINKS = [
     { Icon: FiInstagram, href: "#" },
     { Icon: FiYoutube, href: "#" },
-    { Icon: FiLinkedin, href: "#" },
-    { Icon: FiGithub, href: "#" }
+    { Icon: FiLinkedin, href: "https://www.linkedin.com/in/aditya-waghmare-95271b25a/" },
+    { Icon: FiGithub, href: "https://github.com/awadi99" }
 ];
 
 const EXPLORE_LINKS = [
@@ -50,7 +50,7 @@ export default function Footer() {
                         <div className="inline-flex items-center gap-3 py-3 px-5 rounded-2xl bg-white/5 border border-slate-800 group hover:border-blue-500/30 transition-all transform-gpu">
                             <Code2 size={18} className="text-[#3B82F6]" />
                             <div className="text-left">
-                                <p className="text-[9px] uppercase tracking-[0.2em] text-slate-500 font-black">Digital Architect</p>
+                                <p className="text-[9px] uppercase tracking-[0.2em] text-slate-500 font-black">Developed By</p>
                                 <p className="text-sm font-bold text-slate-300 group-hover:text-[#3B82F6] transition-colors">Aditya Waghmare</p>
                             </div>
                         </div>

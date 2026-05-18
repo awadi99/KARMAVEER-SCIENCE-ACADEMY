@@ -29,9 +29,7 @@ export default function ForgotPassword() {
         mode: "onTouched", 
     });
 
-    
     const onSubmit = (data) => {
-
         const payload = {
             email: data.email,
             erpId: data.erpId,
@@ -64,26 +62,31 @@ export default function ForgotPassword() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onSubmit={handleSubmit(onSubmit)} 
-                        className="space-y-5"
+                        className="space-y-5 text-slate-900 dark:text-white"
                     >
+                        {/* ERP ID Field - Wired text layers for light/dark support */}
                         <Input
                             label="ERP ID"
                             placeholder="KSA123"
                             icon={<ShieldCheck size={18} />}
                             error={errors.erpId?.message}
                             {...register("erpId")}
+                            className="bg-slate-50 dark:bg-slate-900/60 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800"
                             // ERP ID uppercase hone ke liye auto-transform (UI only)
                             onChange={(e) => e.target.value = e.target.value.toUpperCase()}
                         />
 
+                        {/* Academy Email Field */}
                         <Input
                             label="Academy Email"
                             placeholder="name@scienceacademy.com"
                             icon={<Mail size={18} />}
                             error={errors.email?.message}
                             {...register("email")}
+                            className="bg-slate-50 dark:bg-slate-900/60 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800"
                         />
 
+                        {/* New Password Field */}
                         <Input
                             label="New Password"
                             type="password"
@@ -91,20 +94,23 @@ export default function ForgotPassword() {
                             icon={<KeyRound size={18} />}
                             error={errors.password?.message}
                             {...register("password")}
+                            className="bg-slate-50 dark:bg-slate-900/60 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800"
                         />
 
+                        {/* Update Button - Switched violet highlights with clean institutional blue */}
                         <Button 
                             type="submit" 
                             loading={resetPassword.isPending} 
-                            className="w-full py-4 shadow-lg shadow-violet-600/10"
+                            className="w-full py-4 bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500 text-white shadow-md shadow-blue-600/10 transition-all duration-500"
                         >
                             Update Password <KeyRound size={16} className="ml-2" />
                         </Button>
 
+                        {/* Back to Login Anchor navigation fix */}
                         <div className="text-center mt-4">
                             <Link 
                                 to="/login" 
-                                className="inline-flex items-center gap-2 text-slate-500 hover:text-white text-[10px] font-bold uppercase tracking-tighter transition-colors"
+                                className="inline-flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 text-[10px] font-black uppercase tracking-wider transition-colors"
                             >
                                 <ArrowLeft size={12} /> Back to Login
                             </Link>
@@ -115,17 +121,21 @@ export default function ForgotPassword() {
                         key="success"
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="text-center py-2"
+                        className="text-center py-2 text-slate-900 dark:text-white"
                     >
                         <div className="flex justify-center mb-4">
-                            <div className="p-3 bg-green-500/10 rounded-full">
-                                <CheckCircle2 size={40} className="text-green-500" />
+                            {/* Academic Success indicator styling */}
+                            <div className="p-3 bg-emerald-50 dark:bg-emerald-500/10 rounded-full border border-emerald-100 dark:border-emerald-500/20">
+                                <CheckCircle2 size={40} className="text-emerald-600 dark:text-emerald-500" />
                             </div>
                         </div>
-                        <p className="text-slate-400 text-sm mb-6">
+                        <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 font-medium">
                             Security credentials updated. Log in to continue.
                         </p>
-                        <Button onClick={() => navigate('/login')} className="w-full">
+                        <Button 
+                            onClick={() => navigate('/login')} 
+                            className="w-full py-4 bg-blue-600 dark:bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500 text-white shadow-md transition-all duration-500"
+                        >
                             Go to Login
                         </Button>
                     </motion.div>
