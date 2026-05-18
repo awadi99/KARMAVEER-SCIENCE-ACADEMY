@@ -171,10 +171,8 @@ export const googleCallback = async (req, res) => {
             erpId: req.user.erpId
         }, res);
 
-        res.header("Access-Control-Allow-Credentials", "true");
-        res.header("Access-Control-Allow-Origin", "https://karmaveer-science-academy-53pt.vercel.app");
         
-        const frontendUrl = "https://karmaveer-science-academy-53pt.vercel.app";
+        const frontendUrl = "http://localhost:5173";
         let targetPath = "/dashboard"; 
 
         if (req.user.role !== 'admin') {
@@ -184,11 +182,11 @@ export const googleCallback = async (req, res) => {
         }
 
         
-        return res.redirect(`${frontendUrl}${targetPath}`);
+        res.redirect(`${frontendUrl}${targetPath}`);
     }
     catch (error) {
         console.error("Google Callback Error:", error);
-        res.redirect("https://karmaveer-science-academy-53pt.vercel.app/login?error=auth_failed");
+        res.redirect("http://localhost:5173/login?error=auth_failed");
     }
 }
 

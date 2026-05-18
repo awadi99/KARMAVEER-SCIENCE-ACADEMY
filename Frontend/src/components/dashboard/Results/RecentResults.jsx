@@ -5,11 +5,13 @@ import {
     ExternalLink
 } from 'lucide-react';
 
+// const profilePic = user?.profilePic || user?.image || "";
+
 // Memoized individual row to prevent unnecessary re-renders of the whole list
 const StudentRow = memo(({ item }) => (
     <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:shadow-sm dark:hover:bg-slate-800/40 transition-all group">
         <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0 overflow-hidden">
-            {item.studentId?.profilePic ? (
+        {item.studentId?.profilePic ? (
                 <img src={item.studentId.profilePic} alt="" className="h-full w-full object-cover" loading="lazy" />
             ) : <UserIcon size={16} className="text-slate-400" />}
         </div>

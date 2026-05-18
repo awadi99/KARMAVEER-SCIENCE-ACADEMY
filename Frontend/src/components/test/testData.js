@@ -38,4 +38,23 @@ export const testData = [
         border: "border-rose-100 dark:border-rose-900/40"
     },
 
+    { 
+        id: 5, 
+        name: "JEE", 
+        icon: "Layers", 
+        theme: "cyan", 
+        bg: "bg-cyan-50/50 dark:bg-cyan-900/20",
+        text: "text-cyan-600 dark:text-cyan-400",
+        border: "border-cyan-100 dark:border-cyan-900/40"
+    },
+    { 
+        id: 6, 
+        name: "MHT-CET", 
+        icon: "GraduationCap", 
+        theme: "purple", 
+        bg: "bg-purple-50/50 dark:bg-purple-900/20",
+        text: "text-purple-600 dark:text-purple-400",
+        border: "border-purple-100 dark:border-purple-900/40"
+    }
+
 ];
