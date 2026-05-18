@@ -16,11 +16,13 @@ app.set("trust proxy", 1);
 
 app.use(compression()); 
 
-app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-}));
 
+app.use(cors({
+    origin: ['https://karmaveer-science-academy-53pt.vercel.app', 'http://localhost:5173'], 
+    credentials: true, 
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
 app.use(helmet({
     crossOriginOpenerPolicy: false,
 }));
