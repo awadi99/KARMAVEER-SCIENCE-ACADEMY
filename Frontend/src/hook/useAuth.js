@@ -4,15 +4,16 @@ import apiClient from '../api/apiClient';
 export const useAuth = () => {
     const queryClient = useQueryClient();
 
-    // 1. AUTH QUERY (With Enabled Logic)
     const { data: user, isLoading, isError } = useQuery({
         queryKey: ['authUser'],
         queryFn: async () => {
             try {
                 const { data } = await apiClient.get('/auth/me');
+                
+                localStorage.setItem("isLoggedIn", "true");
+                
                 return data;
             } catch (err) {
-                // Agar session expired hai, toh localStorage clear kardo
                 if (err.response?.status === 401) {
                     localStorage.removeItem("isLoggedIn");
                     return null;
@@ -20,13 +21,12 @@ export const useAuth = () => {
                 throw err;
             }
         },
-        // Request tabhi trigger hogi jab login flag true ho
-        enabled: localStorage.getItem("isLoggedIn") === "true" || window.location.pathname.includes('/auth/google/callback'),
-        staleTime: 1000 * 60 * 15, // 15 mins
+      
+        enabled: true, 
+        staleTime: 1000 * 60 * 15,
         retry: false,
         refetchOnWindowFocus: false,
     });
-
     // 2. LOGIN MUTATION
     const loginUser = useMutation({
         mutationFn: async (credentials) => {
