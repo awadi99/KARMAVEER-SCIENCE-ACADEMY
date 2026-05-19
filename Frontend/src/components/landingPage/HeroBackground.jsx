@@ -1,26 +1,28 @@
 import React from "react";
-import herobg from '../../assets/herobg.png';
+import herobg from '../../assets/website/hero_bg.jpeg';
 
-export default function HeroBackground() {
+
+const HeroBackground = React.memo(() => {
     return (
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
             
-            <div className="absolute inset-0 hidden dark:block transition-opacity duration-700">
-                <img
-                    src={herobg}
-                    alt="Academy Background"
-                    className="w-full h-full object-cover opacity-60"
-                />
-                <div className="absolute inset-0 bg-black/20" />
-            </div>
+            
+            <img
+                src={herobg}
+                alt=""
+                fetchpriority="high" 
+                className="w-full h-full object-cover object-center transform-gpu"
+                style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
+            />
 
-            
-            <div className="absolute inset-0 dark:hidden opacity-40 transition-opacity duration-700">
-                <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:40px_40px]" />
-            </div>
 
-            
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 dark:via-violet-500/50 to-transparent" />
+            <div className="absolute inset-0 hidden dark:block bg-gradient-to-b from-[#0F172A]/75 via-[#0F172A]/85 to-[#0F172A]" />
+            <div className="absolute inset-0 dark:hidden bg-gradient-to-b from-[#F9FAFB]/70 via-[#F9FAFB]/80 to-[#F9FAFB]" />
+
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 dark:via-blue-500/40 to-transparent" />
         </div>
     );
-}
+});
+
+HeroBackground.displayName = 'HeroBackground';
+export default HeroBackground;
