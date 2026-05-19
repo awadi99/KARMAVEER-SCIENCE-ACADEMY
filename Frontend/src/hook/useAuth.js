@@ -26,20 +26,23 @@ export const useAuth = () => {
         }
     });
 
-    const logout = async () => {
-        try {
+    const logoutMutation = useMutation({
+        mutationFn: () => apiClient.post('/auth/logout'),
+        onSettled: () => {
+            // 1. React Query ka cache saaf karo
+            queryClient.clear(); 
             
-            await apiClient.post('/auth/logout');
-        } catch (err) {
-            console.error("Logout API failed", err);
-        } finally {
-            
-            queryClient.clear();
-            sessionStorage.clear();
+            // 2. Storage saaf karo
             localStorage.clear();
+            sessionStorage.clear();
+            
+            // 3. IMPORTANT: Auth state ko explicitly null set karo
+            queryClient.setQueryData(['authUser'], null);
+            
+            // 4. Page refresh karo taaki koi stale component mount na rahe
             window.location.href = '/'; 
         }
-    };
+    });
 
     const loginUser = useMutation({
         mutationFn: async (credentials) => {
@@ -92,10 +95,11 @@ export const useAuth = () => {
         isError, 
         loginUser, 
         registerUser, 
-        logout, 
         verifyErp, 
         resetPassword, 
         updateProfile ,
-        googleLogin
+        googleLogin,
+        logout: logoutMutation.mutate, 
+    isLoggingOut: logoutMutation.isPending
     };
 };
