@@ -22,11 +22,11 @@ export default function App() {
   const { user, isLoading } = useAuth();
 
   useEffect(() => {
-
-if (user) {
-        localStorage.setItem("isLoggedIn", "true");
+  
+    if (user && localStorage.getItem("isLoggedIn") !== "true") {
+      localStorage.setItem("isLoggedIn", "true");
     }
-}, [user]);
+  }, [user]);
 
   // --- 1. Theme Logic ---
   const [isDark, setIsDark] = useState(() => {
