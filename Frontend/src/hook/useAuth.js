@@ -45,7 +45,7 @@ export const useAuth = () => {
     const logout = useMutation({
         mutationFn: async () => await apiClient.post('/auth/logout'),
         onSettled: () => {
-            localStorage.clear();
+            localStorage.removeItem("isLoggedIn");
             sessionStorage.clear();
             queryClient.removeQueries({ queryKey: ['authUser'] });
             window.location.href = '/'; 
