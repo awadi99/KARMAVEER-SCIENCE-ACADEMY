@@ -9,50 +9,50 @@ export const useAuth = () => {
         queryFn: async () => {
             try {
                 const { data } = await apiClient.get('/auth/me');
-                
-                localStorage.setItem("isLoggedIn", "true");
-                
                 return data;
             } catch (err) {
-                if (err.response?.status === 401) {
-                    localStorage.removeItem("isLoggedIn");
-                    return null;
-                }
+                if (err.response?.status === 401) return null;
                 throw err;
             }
         },
-      
-        enabled: true, 
         staleTime: 1000 * 60 * 15,
         retry: false,
         refetchOnWindowFocus: false,
     });
-    // 2. LOGIN MUTATION
+
+    const googleLogin = useMutation({
+        mutationFn: () => {
+            window.location.href = `${import.meta.env.VITE_API_BASE_URL}/auth/google`;
+        }
+    });
+
+    const logout = async () => {
+        try {
+            
+            await apiClient.post('/auth/logout');
+        } catch (err) {
+            console.error("Logout API failed", err);
+        } finally {
+            
+            queryClient.clear();
+            sessionStorage.clear();
+            localStorage.clear();
+            window.location.href = '/'; 
+        }
+    };
+
     const loginUser = useMutation({
         mutationFn: async (credentials) => {
             const { data } = await apiClient.post('/auth/login', credentials);
             return data;
         },
         onSuccess: (data) => {
-        localStorage.setItem("isLoggedIn", "true");
             const loggedInUser = data.user || data;
             queryClient.setQueryData(['authUser'], loggedInUser);
             queryClient.invalidateQueries({ queryKey: ['authUser'] });
         }
     });
 
-    // 3. LOGOUT MUTATION
-    const logout = useMutation({
-        mutationFn: async () => await apiClient.post('/auth/logout'),
-        onSettled: () => {
-            localStorage.removeItem("isLoggedIn");
-            sessionStorage.clear();
-            queryClient.removeQueries({ queryKey: ['authUser'] });
-            window.location.href = '/'; 
-        }
-    });
-
-    // 4. UPDATE PROFILE MUTATION
     const updateProfile = useMutation({
         mutationFn: async (payload) => {
             const { data } = await apiClient.patch('/auth/update-profile', payload);
@@ -61,10 +61,10 @@ export const useAuth = () => {
         onSuccess: (response) => {
             const updatedUser = response.user || response;
             queryClient.setQueryData(['authUser'], updatedUser);
+            queryClient.invalidateQueries({ queryKey: ['authUser'] });
         }
     });
 
-    // 5. REGISTER MUTATION
     const registerUser = useMutation({
         mutationFn: async (userData) => {
             const { data } = await apiClient.post('/auth/register', userData);
@@ -72,7 +72,6 @@ export const useAuth = () => {
         }
     });
 
-    // 6. RESET PASSWORD MUTATION
     const resetPassword = useMutation({
         mutationFn: async (userData) => {
             const { data } = await apiClient.post('/auth/reset-password', userData);
@@ -80,7 +79,6 @@ export const useAuth = () => {
         }
     });
 
-    // 7. ERP VERIFICATION MUTATION
     const verifyErp = useMutation({
         mutationFn: async (payload) => {
             const { data } = await apiClient.post('/auth/verify-erp', payload);
@@ -93,10 +91,11 @@ export const useAuth = () => {
         isLoading, 
         isError, 
         loginUser, 
-        logout: logout.mutate, // logout.mutate() call karein
         registerUser, 
+        logout, 
         verifyErp, 
         resetPassword, 
-        updateProfile 
+        updateProfile ,
+        googleLogin
     };
 };

@@ -21,19 +21,6 @@ const TestExecution = lazy(() => import('./components/test/TestExecution'));
 export default function App() {
   const { user, isLoading } = useAuth();
 
-useEffect(() => {
-    // 1. Existing check (for normal login)
-    if (user && localStorage.getItem("isLoggedIn") !== "true") {
-        localStorage.setItem("isLoggedIn", "true");
-    }
-
-    // 2. Google Login ke liye (New logic)
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("status") === "success") {
-        localStorage.setItem("isLoggedIn", "true");
-    }
-}, [user]);
-
   // --- 1. Theme Logic ---
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('theme');
@@ -44,8 +31,6 @@ useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark);
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }, [isDark]);
-
-
 
   // --- 2. Auth Role Check ---
   const isAdmin = useMemo(() => user?.role === 'admin', [user]);

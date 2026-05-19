@@ -36,7 +36,7 @@ export default function Hero() {
                         <div className="flex items-center gap-2 mb-4">
                             <span className="flex h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
                             <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-[#94A3B8]">
-                                Admissions Open 2026-27
+                                Admissions Open 
                             </span>
                         </div>
 
