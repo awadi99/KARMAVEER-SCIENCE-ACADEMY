@@ -20,29 +20,22 @@ export const useAuth = () => {
         refetchOnWindowFocus: false,
     });
 
-    const googleLogin = useMutation({
-        mutationFn: () => {
-            window.location.href = `${import.meta.env.VITE_API_BASE_URL}/auth/google`;
-        }
-    });
-
-    const logoutMutation = useMutation({
-        mutationFn: () => apiClient.post('/auth/logout'),
-        onSettled: () => {
-            // 1. React Query ka cache saaf karo
-            queryClient.clear(); 
+    const logout = async () => {
+        try {
             
-            // 2. Storage saaf karo
-            localStorage.clear();
+            await apiClient.post('/auth/logout');
+        } catch (err) {
+            console.error("Logout API failed", err);
+        } finally {
+            
+            queryClient.clear();
             sessionStorage.clear();
+            localStorage.clear();
             
-            // 3. IMPORTANT: Auth state ko explicitly null set karo
-            queryClient.setQueryData(['authUser'], null);
-            
-            // 4. Page refresh karo taaki koi stale component mount na rahe
+            // 3. Force Hard Reload to landing page
             window.location.href = '/'; 
         }
-    });
+    };
 
     const loginUser = useMutation({
         mutationFn: async (credentials) => {
@@ -95,11 +88,9 @@ export const useAuth = () => {
         isError, 
         loginUser, 
         registerUser, 
+        logout, 
         verifyErp, 
         resetPassword, 
-        updateProfile ,
-        googleLogin,
-        logout: logoutMutation.mutate, 
-    isLoggingOut: logoutMutation.isPending
+        updateProfile 
     };
 };
