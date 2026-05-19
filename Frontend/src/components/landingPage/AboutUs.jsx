@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Shield, Sparkles } from 'lucide-react';
+import { hero_bg } from '../../assets/website/index.js';
 
 export default function AboutUs() {
     return (
@@ -54,7 +55,7 @@ export default function AboutUs() {
                             className="relative z-10 rounded-[3rem] overflow-hidden border-[12px] border-slate-50 dark:border-[#1E293B] shadow-2xl shadow-blue-900/5 isolate transform-gpu"
                         >
                             <img
-                                src="/image/hero_bg.jpg"
+                                src={hero_bg}
                                 alt="KSA Journey"
                                 loading="lazy"
                                 className="w-full h-[550px] object-cover transition-transform duration-700 ease-out hover:scale-105 transform-gpu will-change-transform"

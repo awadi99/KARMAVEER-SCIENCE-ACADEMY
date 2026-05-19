@@ -7,7 +7,9 @@ import VisionMission from '../components/landingPage/VisionMission';
  const Hero = lazy(()=>import('../components/landingPage/Hero'));
  const AboutUs = lazy(()=>import('../components/landingPage/AboutUs'));
  const ContactUs = lazy(()=>import(('../components/landingPage/ContactUs')));
+ const Gallery = lazy (()=> import ('../components/landingPage/Gallery'));
 import Footer from '../components/common/Footer';
+
 
 
 export default function Landing({isDark, setIsDark}) {
@@ -16,6 +18,7 @@ export default function Landing({isDark, setIsDark}) {
             <Navbar isDark={isDark} setIsDark={setIsDark} />
             <Hero />
             <Features />
+            <Gallery/>
             <VisionMission />
             <AboutUs/>
             <FAQ/>
