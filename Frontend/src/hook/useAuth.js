@@ -21,7 +21,7 @@ export const useAuth = () => {
             }
         },
         // Request tabhi trigger hogi jab login flag true ho
-        enabled: true,
+        enabled: localStorage.getItem("isLoggedIn") === "true" || window.location.pathname.includes('/auth/google/callback'),
         staleTime: 1000 * 60 * 15, // 15 mins
         retry: false,
         refetchOnWindowFocus: false,
