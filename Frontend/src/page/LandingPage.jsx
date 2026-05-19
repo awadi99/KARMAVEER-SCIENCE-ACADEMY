@@ -10,8 +10,8 @@ import VisionMission from '../components/landingPage/VisionMission';
  const Gallery = lazy (()=> import ('../components/landingPage/Gallery'));
 
  import AchievementSlider from '../components/landingPage/AchievementSlider';
-import Footer from '../components/common/Footer';
 import FacultyPage from '../components/landingPage/FacultyPage';
+import Footer from '../components/common/Footer';
 
 
 

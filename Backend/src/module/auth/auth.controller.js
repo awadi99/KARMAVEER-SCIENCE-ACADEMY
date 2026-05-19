@@ -172,7 +172,7 @@ export const googleCallback = async (req, res) => {
         }, res);
 
         
-        const frontendUrl = "http://localhost:5173";
+        const frontendUrl = "https://karmaveer-science-academy-53pt.vercel.app";
         let targetPath = "/dashboard"; 
 
         if (req.user.role !== 'admin') {
@@ -186,7 +186,7 @@ export const googleCallback = async (req, res) => {
     }
     catch (error) {
         console.error("Google Callback Error:", error);
-        res.redirect("http://localhost:5173/login?error=auth_failed");
+        res.redirect("https://karmaveer-science-academy-53pt.vercel.app/login?error=auth_failed");
     }
 }
 

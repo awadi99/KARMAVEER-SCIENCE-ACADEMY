@@ -10,7 +10,7 @@ const HeroBackground = React.memo(() => {
             <img
                 src={herobg}
                 alt=""
-                fetchpriority="high" 
+                fetchPriority="high" 
                 className="w-full h-full object-cover object-center transform-gpu"
                 style={{ transform: 'translateZ(0)', backfaceVisibility: 'hidden' }}
             />

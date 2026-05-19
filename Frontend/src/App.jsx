@@ -21,6 +21,13 @@ const TestExecution = lazy(() => import('./components/test/TestExecution'));
 export default function App() {
   const { user, isLoading } = useAuth();
 
+  useEffect(() => {
+
+if (user) {
+        localStorage.setItem("isLoggedIn", "true");
+    }
+}, [user]);
+
   // --- 1. Theme Logic ---
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('theme');
@@ -31,6 +38,8 @@ export default function App() {
     document.documentElement.classList.toggle('dark', isDark);
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }, [isDark]);
+
+
 
   // --- 2. Auth Role Check ---
   const isAdmin = useMemo(() => user?.role === 'admin', [user]);
