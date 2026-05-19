@@ -8,7 +8,11 @@ import VisionMission from '../components/landingPage/VisionMission';
  const AboutUs = lazy(()=>import('../components/landingPage/AboutUs'));
  const ContactUs = lazy(()=>import(('../components/landingPage/ContactUs')));
  const Gallery = lazy (()=> import ('../components/landingPage/Gallery'));
+
+ import AchievementSlider from '../components/landingPage/AchievementSlider';
 import Footer from '../components/common/Footer';
+import FacultyPage from '../components/landingPage/FacultyPage';
+
 
 
 
@@ -17,10 +21,13 @@ export default function Landing({isDark, setIsDark}) {
         <div className='overflow-x-hidden '>
             <Navbar isDark={isDark} setIsDark={setIsDark} />
             <Hero />
+            <AchievementSlider/>
             <Features />
             <Gallery/>
             <VisionMission />
             <AboutUs/>
+            <FacultyPage/>
+
             <FAQ/>
             <ContactUs/>
             <Footer /> 

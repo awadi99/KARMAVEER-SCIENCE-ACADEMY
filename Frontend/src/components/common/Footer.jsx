@@ -42,7 +42,7 @@ export default function Footer() {
                                 </h2>
                             </div>
                             <p className="text-slate-400 text-sm leading-relaxed max-w-sm font-medium">
-                                Premier coaching for JEE, NEET, and MHT-CET. Dedicated to fostering academic brilliance and disciplined success.
+                                Premier coaching for JEE and MHT-CET. Dedicated to fostering academic brilliance and disciplined success.
                             </p>
                         </div>
 

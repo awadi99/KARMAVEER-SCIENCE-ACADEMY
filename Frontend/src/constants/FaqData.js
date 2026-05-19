@@ -6,13 +6,13 @@
     },
     {
         id: 2,
-        question: "Can I switch between JEE and NEET batches?",
+        question: "Can I switch between 11, 12, JEE batches?",
         answer: "Yes. We understand that students' goals can evolve. We offer a 'Foundation Bridge' during the first 3 months where students can transition between engineering and medical paths after consulting with our HOD."
     },
     {
         id: 3,
         question: "Do you provide online access to your Test Portal?",
-        answer: "Absolutely. Every KSA student gets a unique ID for our high-speed Test Portal. You can practice previous years' JEE/NEET papers and take our weekly 'Sunday Sprints' from any device at home."
+        answer: "Absolutely. Every KSA student gets a unique ID for our high-speed Test Portal. You can practice previous years' JEE papers and take our weekly 'Sunday Sprints' from any device at home."
     },
     {
         id: 4,

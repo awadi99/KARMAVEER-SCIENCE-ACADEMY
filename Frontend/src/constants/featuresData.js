@@ -3,7 +3,7 @@ import { BookOpen, Trophy, Users, Laptop, Target, Home, Building2 } from "lucide
 const features = [
     {
         title: "Expert Faculty",
-        desc: "Specialized educators for MHT-CET, JEE, and NEET with proven results.",
+        desc: "Specialized educators for MHT-CET, JEE with proven results.",
         icon: Users,
         iconColor: "text-blue-600 dark:text-blue-400",
         bgColor: "bg-blue-50 dark:bg-blue-950/30",
@@ -11,7 +11,7 @@ const features = [
     },
     {
         title: "Online Test Portal",
-        desc: "Simulated exam environment for MHT-CET, JEE, and NEET with instant results.",
+        desc: "Simulated exam environment for MHT-CET, JEE with instant results.",
         icon: Laptop,
         iconColor: "text-purple-600 dark:text-purple-400",
         bgColor: "bg-purple-50 dark:bg-purple-950/30",
