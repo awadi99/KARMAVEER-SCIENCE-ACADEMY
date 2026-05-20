@@ -93,7 +93,7 @@ export const useTest = () => {
             queryKey: ['dashboard', search, std],
             queryFn: async () => {
                 // Fetching from the new optimized summary endpoint
-                const { data } = await apiClient.get(`/api/user/summary?standard=${std}`);
+                const { data } = await apiClient.get(`/user/summary?standard=${std}`);
                 return data; 
             },
             staleTime: 1000 * 60 * 2, // Cache for 2 mins to prevent redundant API hits
