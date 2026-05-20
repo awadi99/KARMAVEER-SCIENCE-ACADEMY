@@ -46,12 +46,26 @@ export const useUser = (filters = {}) => {
         }
     });
 
+
+    const useDashboardSummary = (filters, std) => {
+        return useQuery({
+            queryKey: ['dashboard-summary', std],
+            queryFn: async () => {
+                // Ensure this endpoint matches your controller route
+                const { data } = await api.get(`/api/user/summary?standard=${std}`);
+                return data; 
+            },
+            staleTime: 1000 * 60 * 2, // 2 minutes cache
+        });
+    };
+
     return {
         students: studentsQuery.data?.students || [],
         total: studentsQuery.data?.total || 0,
         isLoading: studentsQuery.isLoading,
         isError: studentsQuery.isError,
         deleteStudent: deleteMutation.mutate,
-        isDeleting: deleteMutation.isPending
+        isDeleting: deleteMutation.isPending,
+        useDashboardSummary
     };
 };
