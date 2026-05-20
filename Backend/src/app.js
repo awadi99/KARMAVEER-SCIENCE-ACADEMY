@@ -35,7 +35,7 @@ app.use(cors({
             return callback(new Error('Blocked by CORS Configuration Layer'));
         }
     },
-    credentials: true, // 🚨 Browser ko cookie capture/save karne deta hai
+    credentials: true, 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
@@ -47,13 +47,18 @@ app.use(helmet({
 app.use(express.json({ limit: '50kb' })); 
 app.use(express.urlencoded({ extended: true, limit: '50kb' }));
 
-// 3. 🚨 Cookiparser initialized before passport mapping
+
 app.use(cookieParser());
 app.use(passport.initialize());
 
 app.get("/", (req, res) => {
-    res.send("API is running optimized for 1000+ students 🚀");
+    res.send("API is running ");
 });
+
+app.get("/ping", (req, res) => {
+    res.status(200).send("pong");
+});
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);

@@ -73,7 +73,7 @@ export default function Footer() {
 
                     {/* 3. CAMPUS CONTACT */}
                     <div className="lg:col-span-3 text-left">
-                        <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#3B82F6] mb-8">Office Desk</h3>
+                        <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#3B82F6] mb-8">Developer Info</h3>
                         <ul className="space-y-5 text-sm font-bold">
                             <li className="flex items-start justify-start gap-4 text-slate-400">
                                 <MapPin size={20} className="text-slate-500 shrink-0 mt-0.5" />
