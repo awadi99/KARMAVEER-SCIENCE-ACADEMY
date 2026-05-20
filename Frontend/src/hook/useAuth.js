@@ -82,7 +82,8 @@ export const useAuth = () => {
         isError, 
         loginUser, 
         registerUser, 
-        logout, 
+        logout: logoutMutation.mutate, 
+        isLoggingOut: logoutMutation.isPending,
         verifyErp, 
         resetPassword, 
         updateProfile 
