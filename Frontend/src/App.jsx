@@ -14,14 +14,13 @@ const ForgotPassword = lazy(() => import('./page/ForgotPassword'));
 const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const ProfilePage = lazy(() => import('./page/ProfilePage'));
 const TestPage = lazy(() => import('./page/TestPage'));
-
-
 const TestExecution = lazy(() => import('./components/test/TestExecution'));
+
+const GoogleAuthSuccess = lazy(() => import('./page/GoogleAuthSuccess'));
 
 export default function App() {
   const { user, isLoading } = useAuth();
 
-  // --- 1. Theme Logic ---
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('theme');
     return saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -32,7 +31,6 @@ export default function App() {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }, [isDark]);
 
-  // --- 2. Auth Role Check ---
   const isAdmin = useMemo(() => user?.role === 'admin', [user]);
 
   if (isLoading) {
@@ -57,26 +55,22 @@ export default function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/forgot-password' element={<ForgotPassword />} />
 
-              
+              {/* ✅ ADD THIS ROUTE */}
+              <Route path='/auth/google/success' element={<GoogleAuthSuccess />} />
+
               <Route path="/dashboard" element={<MainLayout isDark={isDark} setIsDark={setIsDark} />}>
-                
                 
                 <Route index element={
                   isAdmin ? <Dashboard /> : <Navigate to="/dashboard/tests" replace />
                 } />
 
-                
                 <Route path="tests" element={<TestPage />} />
                 <Route path="profile" element={<ProfilePage />} />
-
-
                 <Route path="practice/:testId" element={<TestExecution />} />
-
 
                 {isAdmin && (
                   <>
                     <Route path="students" element={<Student />} />
-
                   </>
                 )}
                 

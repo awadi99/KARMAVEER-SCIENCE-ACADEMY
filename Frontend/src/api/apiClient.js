@@ -9,11 +9,22 @@ const apiClient = axios.create({
   }
 });
 
+// ✅ NEW: Attach JWT token for Google OAuth users
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Agar 401 aaye, toh bas error pass kar do. 
-    // Isse loop nahi banega kyunki hum zabardasti reload nahi kar rahe.
     if (error.response?.status === 401) {
       console.warn("Unauthorized request caught by interceptor.");
     }

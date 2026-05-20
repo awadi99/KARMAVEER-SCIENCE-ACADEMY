@@ -182,7 +182,7 @@ export const googleCallback = async (req, res) => {
         }
 
         
-        res.redirect(`${frontendUrl}${targetPath}`);
+        res.redirect(`${frontendUrl}/auth/google/success?token=${token}&redirect=${targetPath}`);
     }
     catch (error) {
         console.error("Google Callback Error:", error);
