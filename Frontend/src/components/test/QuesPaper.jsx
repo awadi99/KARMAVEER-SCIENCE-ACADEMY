@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 export default function QuesPaper({ testData, onFinish }) {
     const [currentIdx, setCurrentIdx] = useState(0);
-    const [showPalette, setShowPalette] = useState(false); // Mobile ke liye toggle
+    const [showPalette, setShowPalette] = useState(false);
 
     const [answers, setAnswers] = useState(() => {
         const saved = localStorage.getItem(`prac_${testData.testId}`);
@@ -22,10 +22,7 @@ export default function QuesPaper({ testData, onFinish }) {
     }, [currentQuestion._id, currentIdx]);
 
     const handleFinishTest = () => {
-        const unAttemptedCount = testData.questions.filter((q, i) => 
-            answers[q._id || i] === undefined
-        ).length;
-
+        const unAttemptedCount = testData.questions.filter((q, i) => answers[q._id || i] === undefined).length;
         if (unAttemptedCount > 0) {
             toast.error(`Complete all ${unAttemptedCount} remaining questions!`);
             return;
@@ -34,79 +31,82 @@ export default function QuesPaper({ testData, onFinish }) {
     };
 
     return (
-        <div className="flex flex-col lg:flex-row gap-4 h-[90vh] overflow-hidden p-2 sm:p-4">
-            {/* Main Area */}
-            <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                {/* Header - Fixed Height */}
-                <div className="px-4 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50">
-                    <h2 className="font-black text-slate-800 dark:text-white text-[10px] sm:text-xs tracking-widest uppercase truncate">
+        // Main Background - Deep Navy
+        <div className="flex flex-col lg:flex-row gap-4 h-[90vh] overflow-hidden p-2 sm:p-4 bg-[#0a0f1d]">
+            
+            {/* Main Question Area */}
+            <div className="flex-1 flex flex-col bg-[#111827] rounded-[2rem] border border-[#1f2937] shadow-lg overflow-hidden">
+                
+                {/* Header */}
+                <div className="px-6 py-5 border-b border-[#1f2937] flex justify-between items-center bg-[#0f172a]/50">
+                    <h2 className="font-bold text-white text-[10px] tracking-[0.2em] uppercase truncate">
                         {testData.testTitle}
                     </h2>
-                    <div className="flex items-center gap-2">
-                        <button onClick={() => setShowPalette(!showPalette)} className="lg:hidden p-2 bg-slate-200 dark:bg-slate-800 rounded-lg">
+                    <div className="flex items-center gap-3">
+                        <button onClick={() => setShowPalette(!showPalette)} className="lg:hidden p-2 bg-[#1f2937] text-white rounded-xl">
                             <ListChecks size={16} />
                         </button>
-                        <span className="bg-blue-600 text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase">
+                        <span className="bg-[#2563eb] text-white px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider">
                             Q. {currentIdx + 1}/{testData.totalQuestions}
                         </span>
                     </div>
                 </div>
 
-                {/* Question Area - Scrollable */}
-                <div className="flex-1 p-6 sm:p-10 overflow-y-auto">
-                    <p className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-snug">
+                {/* Question Content */}
+                <div className="flex-1 p-8 sm:p-12 overflow-y-auto">
+                    <p className="text-xl sm:text-2xl font-bold text-white mb-10 leading-tight">
                         {currentQuestion.qText}
                     </p>
-                    <div className="grid gap-3">
+                    <div className="grid gap-4">
                         {currentQuestion.options.map((opt, i) => (
                             <button
                                 key={i}
                                 onClick={() => handleSelect(i)}
-                                className={`w-full p-4 rounded-2xl border-2 text-left font-bold transition-all flex items-center gap-4 ${
+                                className={`w-full p-5 rounded-[1.5rem] border-2 text-left font-bold transition-all flex items-center gap-4 ${
                                     answers[currentQuestion._id || currentIdx] === i
-                                    ? 'border-blue-600 bg-blue-50 text-blue-700 dark:bg-blue-900/20'
-                                    : 'border-slate-100 hover:border-slate-300 dark:border-slate-800'
+                                    ? 'border-[#2563eb] bg-[#1e293b] text-[#60a5fa]'
+                                    : 'border-[#1f2937] hover:border-[#374151] text-white'
                                 }`}
                             >
-                                <span className={`h-8 w-8 rounded-lg flex items-center justify-center text-[10px] font-black ${
-                                    answers[currentQuestion._id || currentIdx] === i ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-800'
+                                <span className={`h-9 w-9 rounded-xl flex items-center justify-center text-xs font-black ${
+                                    answers[currentQuestion._id || currentIdx] === i ? 'bg-[#2563eb] text-white' : 'bg-[#1f2937] text-white'
                                 }`}>
                                     {String.fromCharCode(65 + i)}
                                 </span>
-                                <span className="text-sm sm:text-base">{opt}</span>
+                                <span className="text-base">{opt}</span>
                             </button>
                         ))}
                     </div>
                 </div>
 
                 {/* Footer Controls */}
-                <div className="p-4 border-t border-slate-100 flex justify-between items-center">
-                    <button disabled={currentIdx === 0} onClick={() => setCurrentIdx(p => p - 1)} className="text-[10px] font-black text-slate-400 disabled:opacity-0 flex items-center gap-1">
-                        <ChevronLeft size={16} /> PREV
+                <div className="p-6 border-t border-[#1f2937] flex justify-between items-center bg-[#0f172a]">
+                    <button disabled={currentIdx === 0} onClick={() => setCurrentIdx(p => p - 1)} className="text-[10px] font-black text-slate-500 disabled:opacity-0 flex items-center gap-2">
+                        <ChevronLeft size={18} /> PREV
                     </button>
                     {currentIdx === testData.totalQuestions - 1 ? (
-                        <button onClick={handleFinishTest} className="bg-green-600 text-white px-6 py-2.5 rounded-xl font-black text-xs shadow-lg active:scale-95 transition-transform">
-                            SUBMIT TEST
+                        <button onClick={handleFinishTest} className="bg-[#059669] hover:bg-[#047857] text-white px-8 py-3 rounded-2xl font-black text-xs shadow-lg transition-all active:scale-95">
+                            FINISH TEST
                         </button>
                     ) : (
-                        <button onClick={() => setCurrentIdx(p => p + 1)} className="bg-slate-900 text-white px-6 py-2.5 rounded-xl font-black text-xs active:scale-95 transition-transform">
-                            NEXT <ChevronRight size={16} />
+                        <button onClick={() => setCurrentIdx(p => p + 1)} className="bg-[#1f2937] hover:bg-[#374151] text-white px-8 py-3 rounded-2xl font-black text-xs transition-all active:scale-95">
+                            NEXT <ChevronRight size={18} />
                         </button>
                     )}
                 </div>
             </div>
 
-            {/* Question Palette - Mobile Side Sheet */}
-            <div className={`fixed inset-y-0 right-0 z-50 w-72 bg-white dark:bg-slate-900 border-l shadow-2xl p-6 transition-transform lg:static lg:transform-none lg:w-80 ${showPalette ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}`}>
-                <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center gap-2"><Layout size={16} /> <span className="text-[10px] font-black uppercase tracking-widest">Palette</span></div>
-                    <button className="lg:hidden" onClick={() => setShowPalette(false)}>✕</button>
+            {/* Question Palette */}
+            <div className={`fixed inset-y-0 right-0 z-50 w-80 bg-[#111827] border-l border-[#1f2937] shadow-2xl p-8 transition-transform lg:static lg:transform-none ${showPalette ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}`}>
+                <div className="flex justify-between items-center mb-8">
+                    <div className="flex items-center gap-3 text-white"><Layout size={18} /> <span className="text-[10px] font-black uppercase tracking-[0.2em]">Palette</span></div>
+                    <button className="lg:hidden text-white" onClick={() => setShowPalette(false)}>✕</button>
                 </div>
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-3">
                     {testData.questions.map((q, i) => (
-                        <button key={i} onClick={() => { setCurrentIdx(i); setShowPalette(false); }} className={`h-10 w-10 rounded-lg text-xs font-black transition-colors ${
-                            currentIdx === i ? 'ring-2 ring-blue-600' : ''
-                        } ${answers[q._id || i] !== undefined ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
+                        <button key={i} onClick={() => { setCurrentIdx(i); setShowPalette(false); }} className={`h-11 w-11 rounded-xl text-xs font-black transition-all ${
+                            currentIdx === i ? 'ring-2 ring-white' : ''
+                        } ${answers[q._id || i] !== undefined ? 'bg-[#2563eb] text-white' : 'bg-[#1f2937] text-slate-400'}`}>
                             {i + 1}
                         </button>
                     ))}
