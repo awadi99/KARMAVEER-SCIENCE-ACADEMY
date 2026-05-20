@@ -8,7 +8,7 @@ import {
     getAdminStats,
     getPracticeQuestions,
     getTestsForStudent ,
-    getDashboardSummary
+
 } from './test.controller.js';
 
 import { protect, adminOnly } from '../../middlewares/auth.middleware.js';
@@ -29,6 +29,6 @@ router.get('/questions/:testId', protect, getPracticeQuestions);
 
 router.post('/submit', protect, submitTest);
 
-router.get('/summary', protect, adminOnly, getDashboardSummary);
+
 
 export default router;
