@@ -89,7 +89,7 @@ export default function Dashboard() {
                         {isSummaryLoading ? (
                             <LoadingBlock height="h-32" />
                         ) : (
-                            <Card stats={summaryData?.data} />
+                            <Card stats={summaryData?.summary} />
                         )}
                     </Suspense>
                 </section>
@@ -108,7 +108,7 @@ export default function Dashboard() {
                             {isLoading ? (
                                 <LoadingBlock height="h-[400px]" />
                             ) : (
-                                <TestGraph testData={data?.presentList} />
+                                <TestGraph testData={summaryData?.data?.weeklyActivity} />
                             )}
                         </Suspense>
 

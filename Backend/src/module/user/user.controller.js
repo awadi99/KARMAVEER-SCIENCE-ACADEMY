@@ -80,29 +80,57 @@ export const getDashboardSummary = async (req, res) => {
         const { standard } = req.query; 
         const std = Number(standard) || 11;
 
-        // Aaj ki date ke liye
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
 
-        // Sabhi queries ek sath chalengi (Fast execution)
-        const [totalStudents, totalTests, todayAttendance] = await Promise.all([
+        // Pichle 7 din ki calculation
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        // 1. Cards aur Graph ka data parallel fetch karo
+        const [totalStudents, totalTests, todayAttendance, weeklyData] = await Promise.all([
             User.countDocuments({ role: "student", standard: std }),
             Test.countDocuments({ standard: std }),
             Result.countDocuments({ 
                 standard: std, 
                 submittedAt: { $gte: startOfToday } 
-            })
+            }),
+            // 2. Weekly Activity ka Aggregate Pipeline
+            Result.aggregate([
+                { 
+                    $match: { 
+                        standard: std, 
+                        submittedAt: { $gte: sevenDaysAgo } 
+                    } 
+                },
+                {
+                    $group: {
+                        _id: { $dateToString: { format: "%a", date: "$submittedAt" } },
+                        tests: { $sum: 1 }
+                    }
+                },
+                { $sort: { "_id": 1 } } // Sort by Day
+            ])
         ]);
+
+        // MongoDB format ko frontend format mein convert karo
+        const daysOrder = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        const weeklyActivity = daysOrder.map(day => {
+            const found = weeklyData.find(item => item._id === day);
+            return { day, tests: found ? found.tests : 0 };
+        });
 
         res.status(200).json({
             success: true,
             data: {
                 totalStudents,
                 totalTests,
-                todayAttendance
+                todayAttendance,
+                weeklyActivity // Yeh array ab aapke TestGraph ko milega
             }
         });
     } catch (error) {
+        console.error("Dashboard Summary Error:", error);
         res.status(500).json({ success: false, message: "Error fetching summary" });
     }
 };
