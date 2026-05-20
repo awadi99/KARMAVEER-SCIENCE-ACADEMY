@@ -5,7 +5,7 @@ const testSchema = new mongoose.Schema({
     testTitle: { type: String, required: true },
     subject: { 
         type: String, 
-        enum: ['Physics', 'Chemistry', 'Biology', 'Mathematics'], 
+        enum: ['Physics', 'Chemistry', 'Biology', 'Mathematics','JEE','MHT-CET'], 
         required: true 
     },
     standard: { type: Number, enum: [11, 12], required: true, index: true },
