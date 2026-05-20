@@ -1,40 +1,18 @@
 import React, { memo, useMemo, useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios'; 
-import { Trash2, Mail, Loader2, GraduationCap, Hash } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Trash2, Loader2, Hash } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ConfirmModal from './ConfirmModal';
+import { useUser } from '../hooks/useUser';
 
 const ListStudent = memo(({ searchTerm = '' }) => {
     const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
 
-    const { data, isLoading } = useQuery({
-        queryKey: ['students'],
-        queryFn: async () => {
-            const res = await axios.get('https://karmaveer-science-academy.onrender.com/api/user/students',
-                {withCredentials: true}
-            );
-            return res.data.students || [];
-        }
-    });
-
-    const { mutate: deleteStudent, isLoading: isDeleting } = useMutation({
-        mutationFn: async (id) => await axios.delete(`/api/user/${id}`),
-        onSuccess: () => {
-            queryClient.invalidateQueries(['students']);
-            toast.success("Student removed");
-            setIsModalOpen(false);
-        },
-        onError: (err) => {
-            toast.error(err.response?.data?.message || "Error deleting");
-            setIsModalOpen(false);
-        }
-    });
+    const { students, isLoading, deleteStudent, isDeleting } = useUser();
 
     const filteredStudents = useMemo(() => {
-        const students = data || [];
         if (!searchTerm) return students;
         const lowerSearch = searchTerm.toLowerCase();
         return students.filter(s => 
@@ -42,7 +20,7 @@ const ListStudent = memo(({ searchTerm = '' }) => {
             s.erpId?.toLowerCase().includes(lowerSearch) ||
             s.email?.toLowerCase().includes(lowerSearch)
         );
-    }, [searchTerm, data]);
+    }, [searchTerm, students]);
 
     if (isLoading) return (
         <div className="flex flex-col items-center justify-center p-12 space-y-3">
@@ -53,7 +31,6 @@ const ListStudent = memo(({ searchTerm = '' }) => {
 
     return (
         <div className="w-full">
-            {/* --- MOBILE VIEW: Cards (Ye ab mobile par dikhega) --- */}
             <div className="grid grid-cols-1 gap-4 md:hidden">
                 {filteredStudents.map((student) => (
                     <div key={student._id} className="bg-white dark:bg-slate-900 p-5 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm active:scale-[0.98] transition-transform">
@@ -91,7 +68,6 @@ const ListStudent = memo(({ searchTerm = '' }) => {
                 ))}
             </div>
 
-            {/* --- DESKTOP VIEW: Table (Badi screens ke liye) --- */}
             <div className="hidden md:block overflow-hidden rounded-[2rem] border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0F172A] shadow-sm">
                 <table className="w-full text-left border-collapse" style={{ tableLayout: 'fixed' }}>
                     <thead>
@@ -137,7 +113,6 @@ const ListStudent = memo(({ searchTerm = '' }) => {
                 </table>
             </div>
 
-            {/* Empty State */}
             {filteredStudents.length === 0 && (
                 <div className="py-20 text-center rounded-[2rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
                     <p className="text-slate-400 font-medium text-sm">No students found matching your search.</p>
