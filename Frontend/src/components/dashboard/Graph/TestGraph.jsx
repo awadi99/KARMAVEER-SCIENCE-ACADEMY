@@ -26,23 +26,24 @@ const TestGraph = memo(({ testData }) => {
                 </div>
             </header>
 
-            <div className="w-full aspect-[2/1] lg:aspect-[4/1] relative transform-gpu" style={{ contain: 'content' }}>
+            <div className="w-full h-[250px] lg:h-[300px] relative transform-gpu" style={{ contain: 'content' }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data} margin={{ top: 10, right: 10, left: -30, bottom: 0 }}>
+                        {/* ... baaki content same rahega ... */}
                         <CartesianGrid vertical={false} strokeDasharray="4 4" className="text-slate-200 dark:text-slate-800" />
-                        <XAxis 
-                            dataKey="day" 
-                            axisLine={false} tickLine={false} 
-                            tick={{ fontSize: 10, fontWeight: 600, fill: '#64748b' }} dy={10} 
+                        <XAxis
+                            dataKey="day"
+                            axisLine={false} tickLine={false}
+                            tick={{ fontSize: 10, fontWeight: 600, fill: '#64748b' }} dy={10}
                         />
-                        <YAxis 
-                            axisLine={false} tickLine={false} 
-                            tick={{ fontSize: 10, fontWeight: 600, fill: '#64748b' }} 
+                        <YAxis
+                            axisLine={false} tickLine={false}
+                            tick={{ fontSize: 10, fontWeight: 600, fill: '#64748b' }}
                         />
                         <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#3b82f6', strokeWidth: 1 }} isAnimationActive={false} />
                         <Line
                             type="monotone"
-                            dataKey="tests" // API mein jo key hai (e.g., 'tests' ya 'count')
+                            dataKey="tests"
                             stroke="#2563eb"
                             strokeWidth={3}
                             dot={{ r: 4, fill: '#2563eb', strokeWidth: 2, stroke: '#fff' }}

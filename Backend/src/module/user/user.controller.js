@@ -86,25 +86,18 @@ export const getDashboardSummary = async (req, res) => {
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        // Promise.all ka use karke sab kuch parallel fetch karo
         const [totalStudents, totalTests, todayAttendance, weeklyData] = await Promise.all([
             User.countDocuments({ role: "student", standard: std }),
             Test.countDocuments({ standard: std }),
             Result.countDocuments({ 
                 standard: std, 
-                createdAt: { $gte: startOfToday } // submittedAt ki jagah createdAt use karein
+                createdAt: { $gte: startOfToday } 
             }),
             Result.aggregate([
-                { 
-                    $match: { 
-                        standard: std, 
-                        createdAt: { $gte: sevenDaysAgo } 
-                    } 
-                },
+                { $match: { standard: std, createdAt: { $gte: sevenDaysAgo } } },
                 {
                     $group: {
-                        // timestamps: true add kiya hai, toh createdAt field exist karti hai
-                        _id: { $dateToString: { format: "%a", date: "$createdAt" } },
+                        _id: { $dayOfWeek: "$createdAt" }, 
                         tests: { $sum: 1 }
                     }
                 },
@@ -112,25 +105,19 @@ export const getDashboardSummary = async (req, res) => {
             ])
         ]);
 
-        // Days map karo taki agar kisi din 0 tests ho, toh bhi graph broken na dikhe
+        // Mapping 1(Sun) to 7(Sat) to names
+        const dayMap = { 1: "Sun", 2: "Mon", 3: "Tue", 4: "Wed", 5: "Thu", 6: "Fri", 7: "Sat" };
         const daysOrder = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
         const weeklyActivity = daysOrder.map(day => {
-            const found = weeklyData.find(item => item._id === day);
+            const dayIndex = Object.keys(dayMap).find(key => dayMap[key] === day);
+            const found = weeklyData.find(item => item._id == dayIndex);
             return { day, tests: found ? found.tests : 0 };
         });
 
-        res.status(200).json({
-            success: true,
-            data: {
-                totalStudents,
-                totalTests,
-                todayAttendance,
-                weeklyActivity
-            }
-        });
+        res.status(200).json({ success: true, data: { totalStudents, totalTests, todayAttendance, weeklyActivity } });
     } catch (error) {
-        console.error("Dashboard Summary Error:", error);
-        console.error("DEBUG ERROR STACK:", error.stack);
-        res.status(500).json({ success: false, message: "Error fetching summary" });
+        console.error("Dashboard Error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };
