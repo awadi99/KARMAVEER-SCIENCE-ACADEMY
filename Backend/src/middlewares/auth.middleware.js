@@ -66,7 +66,7 @@ export const protect = async (req, res, next) => {
 
 // ✅ EXISTING: Unchanged
 export const adminOnly = (req, res, next) => {
-    if (req.user && req.user.role === 'admin') {
+    if (req.user && req.user.role.toLowerCase() === 'admin') {
         next();
     } else {
         return res.status(403).json({ message: "Access Denied: Admins Only" });
