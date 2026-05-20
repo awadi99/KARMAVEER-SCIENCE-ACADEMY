@@ -172,7 +172,7 @@ export const googleCallback = async (req, res) => {
         }, res);
 
         
-        const frontendUrl = "https://karmaveer-science-academy-53pt.vercel.app";
+        const frontendUrl = process.env.CLIENT_URL ||"https://karmaveer-science-academy-53pt.vercel.app";
         let targetPath = "/dashboard"; 
 
         if (req.user.role !== 'admin') {
