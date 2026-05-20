@@ -13,7 +13,9 @@ const ListStudent = memo(({ searchTerm = '' }) => {
     const { data, isLoading } = useQuery({
         queryKey: ['students'],
         queryFn: async () => {
-            const res = await axios.get('https://karmaveer-science-academy.onrender.com/api/user/students');
+            const res = await axios.get('https://karmaveer-science-academy.onrender.com/api/user/students',
+                {withCredentials: true}
+            );
             return res.data.students || [];
         }
     });
