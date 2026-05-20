@@ -11,53 +11,47 @@ export const useAuth = () => {
                 const { data } = await apiClient.get('/auth/me');
                 return data;
             } catch (err) {
+                // Agar session nahi hai, to error mat phenko, null return karo
                 if (err.response?.status === 401) return null;
                 throw err;
             }
         },
-        staleTime: 1000 * 60 * 15,
-        retry: false,
+        staleTime: 1000 * 60 * 15, // Cache for 15 mins
+        retry: false, // 401 aane par baar-baar retry mat karo
         refetchOnWindowFocus: false,
     });
 
-    const logout = async () => {
-        try {
-            
-            await apiClient.post('/auth/logout');
-        } catch (err) {
-            console.error("Logout API failed", err);
-        } finally {
-            
+    const logoutMutation = useMutation({
+        mutationFn: () => apiClient.post('/auth/logout'),
+        onSettled: () => {
+            // Cache aur Storage ko total clear karo
             queryClient.clear();
-            sessionStorage.clear();
             localStorage.clear();
+            sessionStorage.clear();
             
-            // 3. Force Hard Reload to landing page
+            // Explicitly user ko null set karo taaki UI turant update ho
+            queryClient.setQueryData(['authUser'], null);
+            
+            // Hard reload for clean state
             window.location.href = '/'; 
         }
+    });
+
+    const googleLogin = () => {
+        window.location.href = `${import.meta.env.VITE_API_BASE_URL}/auth/google`;
     };
 
     const loginUser = useMutation({
-        mutationFn: async (credentials) => {
-            const { data } = await apiClient.post('/auth/login', credentials);
-            return data;
-        },
-        onSuccess: (data) => {
-            const loggedInUser = data.user || data;
-            queryClient.setQueryData(['authUser'], loggedInUser);
-            queryClient.invalidateQueries({ queryKey: ['authUser'] });
+        mutationFn: (credentials) => apiClient.post('/auth/login', credentials),
+        onSuccess: (res) => {
+            queryClient.setQueryData(['authUser'], res.data.user || res.data);
         }
     });
 
     const updateProfile = useMutation({
-        mutationFn: async (payload) => {
-            const { data } = await apiClient.patch('/auth/update-profile', payload);
-            return data;
-        },
-        onSuccess: (response) => {
-            const updatedUser = response.user || response;
-            queryClient.setQueryData(['authUser'], updatedUser);
-            queryClient.invalidateQueries({ queryKey: ['authUser'] });
+        mutationFn: (payload) => apiClient.patch('/auth/update-profile', payload),
+        onSuccess: (res) => {
+            queryClient.setQueryData(['authUser'], res.data.user || res.data);
         }
     });
 
