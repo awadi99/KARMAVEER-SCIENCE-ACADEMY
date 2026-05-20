@@ -130,6 +130,7 @@ export const getDashboardSummary = async (req, res) => {
         });
     } catch (error) {
         console.error("Dashboard Summary Error:", error);
+        console.error("DEBUG ERROR STACK:", error.stack);
         res.status(500).json({ success: false, message: "Error fetching summary" });
     }
 };
