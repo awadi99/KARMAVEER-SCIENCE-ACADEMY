@@ -16,7 +16,7 @@ export default function Dashboard() {
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
     const { useDashboardSummary } = useTest();
-    const { data: summaryData, isLoading:isSummaryLoading } = useDashboardSummary(null, selectedStd);
+    const { data: summaryData, isLoading: isSummaryLoading } = useDashboardSummary(null, selectedStd);
 
     // 🚀 Debounce Logic: 1000 students ka data fetch karne se pehle wait karega
     useEffect(() => {
@@ -64,8 +64,8 @@ export default function Dashboard() {
                                 key={std}
                                 onClick={() => setSelectedStd(std)}
                                 className={`px-5 py-1.5 rounded-lg text-[10px] font-black transition-all ${selectedStd === std
-                                        ? 'bg-white dark:bg-slate-700 text-blue-700 shadow-sm'
-                                        : 'text-slate-500 hover:text-slate-700'
+                                    ? 'bg-white dark:bg-slate-700 text-blue-700 shadow-sm'
+                                    : 'text-slate-500 hover:text-slate-700'
                                     }`}
                             >
                                 STD {std}
@@ -89,7 +89,8 @@ export default function Dashboard() {
                         {isSummaryLoading ? (
                             <LoadingBlock height="h-32" />
                         ) : (
-                            <Card stats={summaryData?.summary} />
+
+                            <Card stats={summaryData?.data} />
                         )}
                     </Suspense>
                 </section>
@@ -105,10 +106,10 @@ export default function Dashboard() {
 
                     <div className="space-y-8">
                         <Suspense fallback={<LoadingBlock height="h-[400px]" />}>
-                            {isLoading ? (
+                            {isSummaryLoading ? ( // yahan isLoading ki jagah isSummaryLoading check karein
                                 <LoadingBlock height="h-[400px]" />
                             ) : (
-                                <TestGraph testData={summaryData?.data?.weeklyActivity} />
+                                <TestGraph testData={summaryData?.data?.weeklyActivity || []} />
                             )}
                         </Suspense>
 
