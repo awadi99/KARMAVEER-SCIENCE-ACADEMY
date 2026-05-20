@@ -89,7 +89,7 @@ export default function Dashboard() {
                         {isSummaryLoading ? (
                             <LoadingBlock height="h-32" />
                         ) : (
-                            <Card stats={summaryData?.summary} />
+                            <Card stats={summaryData?.data} />
                         )}
                     </Suspense>
                 </section>

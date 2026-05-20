@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import CardData from './CardData';
 
 const DashboardCard = memo(({ card, value }) => {
-    // CSS Mapper function
     const getStyles = (id) => {
         switch(id) {
             case 1: return { color: "text-indigo-600 dark:text-violet-400", bg: "bg-indigo-50 dark:bg-violet-500/10" };
@@ -36,9 +35,9 @@ const DashboardCard = memo(({ card, value }) => {
 export default function Card({ stats }) {
     const getValue = (id) => {
         if (!stats) return "0";
-        if (id === 1) return stats.totalStudents || 0;
-        if (id === 2) return stats.totalTests || 0;
-        if (id === 3) return `${stats.attendance || 0}%`;
+        if (id === 1) return stats.totalStudents ?? "0";
+        if (id === 2) return stats.totalTests ?? "0";
+        if (id === 3) return `${stats.todayAttendance ?? 0}%`;
         return "0";
     };
 
