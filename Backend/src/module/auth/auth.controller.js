@@ -165,26 +165,24 @@ export const logout = async (req, res) => {
 export const googleCallback = async (req, res) => {
     try {
         
-        generateToken({
+        
+        const token = generateToken({
             id: req.user._id,
             role: req.user.role,
             erpId: req.user.erpId
         }, res);
 
-        
-        const frontendUrl = process.env.CLIENT_URL ||"https://karmaveer-science-academy-53pt.vercel.app";
-        let targetPath = "/dashboard"; 
+        const frontendUrl = process.env.CLIENT_URL || "https://karmaveer-science-academy-53pt.vercel.app";
+        let targetPath = "/dashboard";
 
         if (req.user.role !== 'admin') {
-            
             const isIncomplete = !req.user.standard || !req.user.stream;
             targetPath = isIncomplete ? "/dashboard/profile" : "/dashboard/tests";
         }
 
-        
         res.redirect(`${frontendUrl}/auth/google/success?token=${token}&redirect=${targetPath}`);
-    }
-    catch (error) {
+
+    } catch (error) {
         console.error("Google Callback Error:", error);
         res.redirect("https://karmaveer-science-academy-53pt.vercel.app/login?error=auth_failed");
     }
