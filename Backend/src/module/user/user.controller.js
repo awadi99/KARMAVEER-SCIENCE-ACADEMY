@@ -83,37 +83,36 @@ export const getDashboardSummary = async (req, res) => {
         const startOfToday = new Date();
         startOfToday.setHours(0, 0, 0, 0);
 
-        // Pichle 7 din ki calculation
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-        // 1. Cards aur Graph ka data parallel fetch karo
+        // Promise.all ka use karke sab kuch parallel fetch karo
         const [totalStudents, totalTests, todayAttendance, weeklyData] = await Promise.all([
             User.countDocuments({ role: "student", standard: std }),
             Test.countDocuments({ standard: std }),
             Result.countDocuments({ 
                 standard: std, 
-                submittedAt: { $gte: startOfToday } 
+                createdAt: { $gte: startOfToday } // submittedAt ki jagah createdAt use karein
             }),
-            // 2. Weekly Activity ka Aggregate Pipeline
             Result.aggregate([
                 { 
                     $match: { 
                         standard: std, 
-                        submittedAt: { $gte: sevenDaysAgo } 
+                        createdAt: { $gte: sevenDaysAgo } 
                     } 
                 },
                 {
                     $group: {
-                        _id: { $dateToString: { format: "%a", date: "$submittedAt" } },
+                        // timestamps: true add kiya hai, toh createdAt field exist karti hai
+                        _id: { $dateToString: { format: "%a", date: "$createdAt" } },
                         tests: { $sum: 1 }
                     }
                 },
-                { $sort: { "_id": 1 } } // Sort by Day
+                { $sort: { "_id": 1 } }
             ])
         ]);
 
-        // MongoDB format ko frontend format mein convert karo
+        // Days map karo taki agar kisi din 0 tests ho, toh bhi graph broken na dikhe
         const daysOrder = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
         const weeklyActivity = daysOrder.map(day => {
             const found = weeklyData.find(item => item._id === day);
@@ -126,7 +125,7 @@ export const getDashboardSummary = async (req, res) => {
                 totalStudents,
                 totalTests,
                 todayAttendance,
-                weeklyActivity // Yeh array ab aapke TestGraph ko milega
+                weeklyActivity
             }
         });
     } catch (error) {

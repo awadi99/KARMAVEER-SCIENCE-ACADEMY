@@ -44,8 +44,9 @@ const resultSchema = new mongoose.Schema({
     score: { type: Number, required: true },
     totalMarks: { type: Number, required: true },
     status: { type: String, enum: ['Pass', 'Fail'], required: true },
+
     submittedAt: { type: Date, default: Date.now }
-}, { versionKey: false });
+}, { versionKey: false,timestamps: true });
 
 resultSchema.index({ testId: 1, studentId: 1 }, { unique: true });
 export const Result = mongoose.model('Result', resultSchema);
