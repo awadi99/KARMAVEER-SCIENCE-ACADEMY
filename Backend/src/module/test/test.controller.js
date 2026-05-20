@@ -110,16 +110,35 @@ export const submitTest = async (req, res) => {
         }
 
         let score = 0;
+        let attempted = 0;
+        let correct = 0;
+        let wrong = 0;
+
         for (let i = 0; i < correctAns.length; i++) {
-            if (Number(answers[i]) === Number(correctAns[i])) score++;
+            // Check for unattempted (null, undefined, or -1)
+            if (answers[i] === null || answers[i] === undefined || answers[i] === -1) {
+                continue; 
+            }
+
+            attempted++;
+            if (Number(answers[i]) === Number(correctAns[i])) {
+                score++; // +1 mark per correct
+                correct++;
+            } else {
+                wrong++; // 0 marks for wrong
+            }
         }
 
-        const resultData = {
+const resultData = {
             score,
             totalMarks: correctAns.length,
+            attempted,
+            correct,
+            wrong,
+            unattempted: correctAns.length - attempted,
+            percentage: Number(((score / correctAns.length) * 100).toFixed(2)),
             status: (score / correctAns.length) >= 0.33 ? 'Pass' : 'Fail'
         };
-
 
         res.status(200).json({ success: true, ...resultData });
 

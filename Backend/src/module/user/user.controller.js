@@ -1,5 +1,7 @@
 
 import User from '../auth/auth.model.js';
+import { Result } from '../test/test.model.js';
+
 
 export const getAdminStudentList = async (req, res) => {
     try {
@@ -46,17 +48,26 @@ export const deleteStudent = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const deletedUser = await User.findOneAndDelete({ 
-            _id: id, 
-            role: "student" 
-        }).select("_id"); 
-
-        if (!deletedUser) {
-            return res.status(404).json({ success: false, message: "Record not found" });
+        // 1. Check if user exists
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Student not found" });
         }
 
-        res.status(200).json({ success: true, message: "Student deleted" });
+        // 2. Cascade Delete: 
+        // User ko delete karo AND uski saari 'Result' entries jahan studentId == id hai
+        await Promise.all([
+            User.findByIdAndDelete(id),
+            Result.deleteMany({ studentId: id }) 
+        ]);
+
+        res.status(200).json({ 
+            success: true, 
+            message: "Student and all their test records deleted" 
+        });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: "Deletion failed" });
+        console.error("Deletion Error:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
