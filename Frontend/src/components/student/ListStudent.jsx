@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Trash2, Loader2, Hash } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import ConfirmModal from './ConfirmModal';
-import { useUser } from '../hooks/useUser';
+import { useUser } from '../../hook/useUser.js';
 
 const ListStudent = memo(({ searchTerm = '' }) => {
     const queryClient = useQueryClient();
