@@ -77,7 +77,7 @@ export const useTest = () => {
                     return data;
                 } catch (error) {
                     // Agar backend 404 ya 500 deta hai toh yahan handle hoga
-                    throw new Error(error.response?.data?.message || "Data fetch karne mein error aayi");
+                    throw new Error(error.response?.data?.message || "Data fetch problem");
                 }
             },
             // Jab tak dono values na ho, request nahi jayegi
@@ -86,11 +86,27 @@ export const useTest = () => {
             retry: 1, // Fail hone par sirf ek baar dobara try karega
         });
     };
+
+
+    const useDashboardSummary = (search, std) => {
+        return useQuery({
+            queryKey: ['dashboard', search, std],
+            queryFn: async () => {
+                // Fetching from the new optimized summary endpoint
+                const { data } = await apiClient.get(`/api/user/summary?standard=${std}`);
+                return data; 
+            },
+            staleTime: 1000 * 60 * 2, // Cache for 2 mins to prevent redundant API hits
+            keepPreviousData: true,    // Keeps UI stable during standard switch
+        });
+    };
+
     return {
         uploadTest,
         useStudentTests, 
         useQuestions,
         submitResult,
-        getStats
+        getStats,
+        useDashboardSummary
     };
 };

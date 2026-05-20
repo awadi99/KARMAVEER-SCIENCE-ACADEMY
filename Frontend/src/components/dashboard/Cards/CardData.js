@@ -23,17 +23,7 @@ const CardData = [
         border: "border-violet-100 dark:border-fuchsia-500/20",
         glow: "shadow-violet-200/50 dark:shadow-fuchsia-500/20"
     },
-    { 
-        id: 3,
-        title: "Pending Fees", 
-        value: "23", // Fixed the value to look like currency
-        Icon: IndianRupee, 
-        // WHITE MODE: Emerald | DARK MODE: Neon Green
-        color: "text-emerald-600 dark:text-emerald-400", 
-        bg_color: "bg-emerald-50 dark:bg-emerald-500/10",
-        border: "border-emerald-100 dark:border-emerald-500/20",
-        glow: "shadow-emerald-200/50 dark:shadow-emerald-500/20"
-    },
+
     { 
         id: 4,
         title: "Today's Attendance", 

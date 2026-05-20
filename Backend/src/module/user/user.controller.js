@@ -1,6 +1,7 @@
 
 import User from '../auth/auth.model.js';
-import { Result } from '../test/test.model.js';
+import { Result,Test } from '../test/test.model.js';
+
 
 
 export const getAdminStudentList = async (req, res) => {
@@ -69,5 +70,39 @@ export const deleteStudent = async (req, res) => {
     } catch (error) {
         console.error("Deletion Error:", error);
         res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
+
+
+
+export const getDashboardSummary = async (req, res) => {
+    try {
+        const { standard } = req.query; 
+        const std = Number(standard) || 11;
+
+        // Aaj ki date ke liye
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
+
+        // Sabhi queries ek sath chalengi (Fast execution)
+        const [totalStudents, totalTests, todayAttendance] = await Promise.all([
+            User.countDocuments({ role: "student", standard: std }),
+            Test.countDocuments({ standard: std }),
+            Result.countDocuments({ 
+                standard: std, 
+                submittedAt: { $gte: startOfToday } 
+            })
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                totalStudents,
+                totalTests,
+                todayAttendance
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Error fetching summary" });
     }
 };

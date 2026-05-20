@@ -15,6 +15,9 @@ export default function Dashboard() {
     const [searchTitle, setSearchTitle] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
+    const { useDashboardSummary } = useTest();
+    const { data: summaryData, isLoading:isSummaryLoading } = useDashboardSummary(null, selectedStd);
+
     // 🚀 Debounce Logic: 1000 students ka data fetch karne se pehle wait karega
     useEffect(() => {
         const timer = setTimeout(() => setDebouncedSearch(searchTitle), 500);
@@ -24,9 +27,10 @@ export default function Dashboard() {
     const { getStats } = useTest();
     const { data, isLoading, isError, error } = getStats(debouncedSearch, selectedStd);
 
+
     return (
         <div className="min-h-screen w-full p-4 sm:p-6 lg:p-10 bg-[#F1F5F9] dark:bg-[#0B0F1A] transition-colors duration-300">
-            
+
             <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6 px-1">
                 <div className="flex items-center gap-4">
                     <div className="h-14 w-14 rounded-2xl bg-blue-700 flex items-center justify-center text-white shadow-lg">
@@ -59,11 +63,10 @@ export default function Dashboard() {
                             <button
                                 key={std}
                                 onClick={() => setSelectedStd(std)}
-                                className={`px-5 py-1.5 rounded-lg text-[10px] font-black transition-all ${
-                                    selectedStd === std
-                                    ? 'bg-white dark:bg-slate-700 text-blue-700 shadow-sm'
-                                    : 'text-slate-500 hover:text-slate-700'
-                                }`}
+                                className={`px-5 py-1.5 rounded-lg text-[10px] font-black transition-all ${selectedStd === std
+                                        ? 'bg-white dark:bg-slate-700 text-blue-700 shadow-sm'
+                                        : 'text-slate-500 hover:text-slate-700'
+                                    }`}
                             >
                                 STD {std}
                             </button>
@@ -83,7 +86,11 @@ export default function Dashboard() {
 
                 <section>
                     <Suspense fallback={<LoadingBlock height="h-32" />}>
-                        <Card stats={data?.summary} />
+                        {isSummaryLoading ? (
+                            <LoadingBlock height="h-32" />
+                        ) : (
+                            <Card stats={summaryData?.summary} />
+                        )}
                     </Suspense>
                 </section>
 
