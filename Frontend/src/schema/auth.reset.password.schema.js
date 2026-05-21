@@ -11,7 +11,7 @@ const resetPasswordSchema = z.object({
     erpId: z
     .string()
     .min(3, "ErpId must be at least 3 characters")
-    .max(7, "ErpId too long")
+    .max(20, "ErpId too long")
     .regex(usernameRegex, "Only letters, numbers, underscore")
     .trim()
     .refine((val) => val === val.toUpperCase(), {
