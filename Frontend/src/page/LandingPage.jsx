@@ -1,4 +1,4 @@
-import React,{lazy} from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import Navbar from '../components/common/NavBar';
