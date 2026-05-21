@@ -9,10 +9,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
     // 2. Sitemap plugin configuration
-    Sitemap({
-      hostname: 'https://karmaveer-science-academy.in',
+Sitemap({
+      // Yahan hyphen hatao:
+      hostname: 'https://karmaveerscienceacademy.in', 
       outDir: 'dist',
-      // Dynamic routes agar hain toh yahan add karo, warna default sahi hai
     })
   ],
   server: {
