@@ -1,5 +1,4 @@
 import React,{lazy} from 'react';
-import { Helmet } from 'react-helmet-async';
 
 import Navbar from '../components/common/NavBar';
 import Features from '../components/landingPage/Features';
@@ -13,6 +12,7 @@ import VisionMission from '../components/landingPage/VisionMission';
  import AchievementSlider from '../components/landingPage/AchievementSlider';
 import FacultyPage from '../components/landingPage/FacultyPage';
 import Footer from '../components/common/Footer';
+import { Helmet } from 'react-helmet-async';
 
 
 
@@ -22,12 +22,12 @@ export default function Landing({isDark, setIsDark}) {
         <div className='overflow-x-hidden '>
             <Helmet>
                 <title>Karmaveer Science Academy | Best Coaching for 11th & 12th Science</title>
-                <meta name="description" content="Karmaveer Science Academy offers expert coaching for 11th, 12th Science and competitive exams. Join us for guaranteed academic success." />
+                <meta name="description" content="Karmaveer Science Academy offers expert coaching for 11th, 12th Science and competitive exams." />
                 <link rel="canonical" href="https://karmaveerscienceacademy.in/" />
             </Helmet>
-            
             <Navbar isDark={isDark} setIsDark={setIsDark} />
-            <main>
+
+            <main>           
             <Hero />
             <AchievementSlider/>
             <Features />
@@ -35,11 +35,10 @@ export default function Landing({isDark, setIsDark}) {
             <VisionMission />
             <AboutUs/>
             <FacultyPage/>
-
             <FAQ/>
             <ContactUs/>
-            <Footer /> 
             </main>
+        <Footer/>
         </div>
     )
 }
