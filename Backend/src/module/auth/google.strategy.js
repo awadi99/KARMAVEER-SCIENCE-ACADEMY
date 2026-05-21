@@ -8,7 +8,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "https://karmaveer-science-academy.onrender.com/api/auth/google/callback",
+            callbackURL: "https://api.karmaveerscienceacademy.in/api/auth/google/callback",
             passReqToCallback: true
         },
         async (req, accessToken, refreshToken, profile, done) => {

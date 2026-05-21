@@ -62,7 +62,7 @@ router.get(
     passport.authenticate("google", {
         session: false,
         // Backend failure redirect (Frontend full URL behtar rehta hai)
-        failureRedirect: "https://karmaveer-science-academy-53pt.vercel.app/login?error=auth_failed"
+        failureRedirect: "https://karmaveer-science-academy.in/login?error=auth_failed"
     }),
     googleCallback
 );
