@@ -19,7 +19,7 @@ app.use(compression());
 
 // 2. 🎯 Highly Specific Production CORS Settings (Bina trailing slash ke)
 const allowedOrigins = [
-    'https://karmaveer-science-academy-53pt.vercel.app', // Main Production Vercel Domain
+    'https://karmaveerscienceacademy.in', // Main Production Vercel Domain
     'http://localhost:5173'                             // Local Testing
 ];
 

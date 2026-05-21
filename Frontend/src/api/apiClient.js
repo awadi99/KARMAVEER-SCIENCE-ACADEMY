@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://karmaveer-science-academy.onrender.com/api', 
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://api.karmaveerscienceacademy.in/api',
   timeout: 8000, 
   withCredentials: true, 
   headers: {
