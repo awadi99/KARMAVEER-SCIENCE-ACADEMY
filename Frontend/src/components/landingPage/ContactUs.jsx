@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, GraduationCap, Clock, ArrowUpRight } from 'lucide-react';
 import { CONTACT_CONFIG } from '../../constants/contactData.js';
+import { Helmet } from 'react-helmet-async';
+
 
 // Pre-define variants outside to prevent object recreation
 const containerVariants = {
@@ -80,9 +82,38 @@ export default function ContactUs() {
     return (
         <section 
             id="contact" 
+            aria-label="Contact Information"
             className="min-h-screen bg-slate-50 dark:bg-[#0F172A] text-slate-900 dark:text-white pt-24 pb-16 px-4 md:px-8 lg:px-16"
             style={styles.section}
         >
+
+<Helmet>
+    <script type="application/ld+json">
+    {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "Karmaveer Science Academy",
+        "description": "Best coaching institute for 11th & 12th Science in Baramati.",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": CONTACT_CONFIG.location.address,
+            "addressLocality": CONTACT_CONFIG.location.city,
+            "addressRegion": CONTACT_CONFIG.location.state,
+            "postalCode": CONTACT_CONFIG.location.postalCode,
+            "addressCountry": CONTACT_CONFIG.location.country
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": CONTACT_CONFIG.location.lat,
+            "longitude": CONTACT_CONFIG.location.lng
+        },
+        "telephone": "+919763120121",
+        "email": "karmaveerstudycenter@gmail.com",
+        "openingHours": "Mo-Su 10:00-20:00"
+    })}
+    </script>
+</Helmet>
+
             <div className="max-w-[1440px] mx-auto relative">
                 
                 {/* ACADEMIC HEADER */}
@@ -147,7 +178,7 @@ export default function ContactUs() {
                         className="lg:col-span-8 min-h-[400px] rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-200 dark:bg-[#1E293B] relative order-1 lg:order-2 shadow-inner"
                     >
                         <iframe
-                            title="Campus Map"
+                            title="Google Maps Location for Karmaveer Science Academy"
                             src={location.mapUrl}
                             className="w-full h-full"
                             style={styles.iframe}
