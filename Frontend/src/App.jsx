@@ -2,11 +2,12 @@ import React, { useState, useEffect, lazy, Suspense, useMemo } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import SmoothScroll from './components/scroll/SmoothScroll';
 import { ToastContainer, Flip } from 'react-toastify';
-import { useAuth } from './hook/useAuth';
+import { useAuth } from './hook/useAuth.js';
 
 // Lazy Loading components
-import LandingPage from './page/LandingPage'; 
+
 import ForgotPassword from './page/ForgotPassword';
+const LandingPage = lazy(() => import('./page/LandingPage'));
 const Register = lazy(() => import('./page/Register'));
 const Login = lazy(() => import('./page/Login'));
 const Dashboard = lazy(() => import('./page/Dashboard'));
@@ -47,7 +48,9 @@ export default function App() {
         <ToastContainer position="top-center" autoClose={2000} theme="dark" transition={Flip} />
 
         <div className="min-h-screen bg-slate-50 dark:bg-[#020205] text-slate-900 dark:text-slate-100 transition-colors duration-300">
-          <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-[#020205]" />}>
+          <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-[#020205]">
+    <div className="w-8 h-8 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
+  </div>}>
             <Routes>
               
               <Route path='/' element={<LandingPage isDark={isDark} setIsDark={setIsDark} />} />
