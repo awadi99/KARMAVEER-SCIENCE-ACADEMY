@@ -40,6 +40,7 @@ export default function Landing({isDark, setIsDark}) {
             </main>
         <Footer/>
         </div>
-    )
-}
+
+)
+};
 
