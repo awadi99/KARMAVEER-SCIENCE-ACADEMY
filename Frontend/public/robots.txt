@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap ka location
+Sitemap: https://karmaveerscienceacademy.in/sitemap.xml
