@@ -5,7 +5,7 @@ import { ToastContainer, Flip } from 'react-toastify';
 import { useAuth } from './hook/useAuth';
 
 // Lazy Loading components
-const LandingPage = lazy(() => import('./page/LandingPage'));
+import LandingPage from './page/LandingPage'; 
 const Register = lazy(() => import('./page/Register'));
 const Login = lazy(() => import('./page/Login'));
 const Dashboard = lazy(() => import('./page/Dashboard'));
