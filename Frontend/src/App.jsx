@@ -6,11 +6,11 @@ import { useAuth } from './hook/useAuth';
 
 // Lazy Loading components
 import LandingPage from './page/LandingPage'; 
+import ForgotPassword from './page/ForgotPassword';
 const Register = lazy(() => import('./page/Register'));
 const Login = lazy(() => import('./page/Login'));
 const Dashboard = lazy(() => import('./page/Dashboard'));
 const Student = lazy(() => import('./page/Student'));
-const ForgotPassword = lazy(() => import('./page/ForgotPassword'));
 const MainLayout = lazy(() => import('./layouts/MainLayout'));
 const ProfilePage = lazy(() => import('./page/ProfilePage'));
 const TestPage = lazy(() => import('./page/TestPage'));
