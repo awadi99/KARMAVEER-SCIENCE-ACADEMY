@@ -4,8 +4,8 @@ import { FiGithub, FiLinkedin, FiInstagram, FiYoutube } from "react-icons/fi";
 import { Mail, MapPin, Phone, Send, Code2, Award } from "lucide-react";
 
 const SOCIAL_LINKS = [
-    { Icon: FiInstagram, href: "#" },
-    { Icon: FiYoutube, href: "#" },
+    { Icon: FiInstagram, href: "https://www.instagram.com/karmaveer_science_academy" },
+    { Icon: FiYoutube, href: "https://youtube.com/@karmaveerstudycenter1264?si=GUb31mefVkhJEWPz" },
     { Icon: FiLinkedin, href: "https://www.linkedin.com/in/aditya-waghmare-95271b25a/" },
     { Icon: FiGithub, href: "https://github.com/awadi99" }
 ];
