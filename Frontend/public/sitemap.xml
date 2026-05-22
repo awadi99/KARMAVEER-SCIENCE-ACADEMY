@@ -39,7 +39,7 @@
       </image:loc>
 
       <image:title>
-        Karmaveer Science Academy,Baramati - Best JEE | MHT-CET Coaching Baramati
+        Karmaveer Science Academy, Baramati - Best JEE & MHT-CET Coaching
       </image:title>
 
       <image:caption>
@@ -118,6 +118,126 @@
 
     <priority>
       0.2
+    </priority>
+
+  </url>
+
+  <!-- =========================
+       PRIVACY POLICY PAGE
+  ========================== -->
+
+  <url>
+
+    <loc>
+      https://karmaveerscienceacademy.in/privacy-policy
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      monthly
+    </changefreq>
+
+    <priority>
+      0.6
+    </priority>
+
+  </url>
+
+  <!-- =========================
+       TERMS & CONDITIONS PAGE
+  ========================== -->
+
+  <url>
+
+    <loc>
+      https://karmaveerscienceacademy.in/terms-and-conditions
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      monthly
+    </changefreq>
+
+    <priority>
+      0.6
+    </priority>
+
+  </url>
+
+  <!-- =========================
+       DASHBOARD PAGE
+  ========================== -->
+
+  <url>
+
+    <loc>
+      https://karmaveerscienceacademy.in/dashboard
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      weekly
+    </changefreq>
+
+    <priority>
+      0.7
+    </priority>
+
+  </url>
+
+  <!-- =========================
+       TEST PAGE
+  ========================== -->
+
+  <url>
+
+    <loc>
+      https://karmaveerscienceacademy.in/dashboard/tests
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      daily
+    </changefreq>
+
+    <priority>
+      0.8
+    </priority>
+
+  </url>
+
+  <!-- =========================
+       PROFILE PAGE
+  ========================== -->
+
+  <url>
+
+    <loc>
+      https://karmaveerscienceacademy.in/dashboard/profile
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      monthly
+    </changefreq>
+
+    <priority>
+      0.4
     </priority>
 
   </url>

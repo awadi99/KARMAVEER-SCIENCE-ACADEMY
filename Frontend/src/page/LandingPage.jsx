@@ -1,15 +1,15 @@
-import React,{lazy} from 'react';
-
+import React, { lazy } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/common/NavBar';
 import Features from '../components/landingPage/Features';
 import VisionMission from '../components/landingPage/VisionMission';
- import FAQ from '../components/landingPage/FAQ';
- const Hero = lazy(()=>import('../components/landingPage/Hero'));
- const AboutUs = lazy(()=>import('../components/landingPage/AboutUs'));
- const ContactUs = lazy(()=>import(('../components/landingPage/ContactUs')));
- const Gallery = lazy (()=> import ('../components/landingPage/Gallery'));
+import FAQ from '../components/landingPage/FAQ';
+const Hero = lazy(() => import('../components/landingPage/Hero'));
+const AboutUs = lazy(() => import('../components/landingPage/AboutUs'));
+const ContactUs = lazy(() => import(('../components/landingPage/ContactUs')));
+const Gallery = lazy(() => import('../components/landingPage/Gallery'));
 
- import AchievementSlider from '../components/landingPage/AchievementSlider';
+import AchievementSlider from '../components/landingPage/AchievementSlider';
 import FacultyPage from '../components/landingPage/FacultyPage';
 import Footer from '../components/common/Footer';
 import { Helmet } from 'react-helmet-async';
@@ -17,7 +17,7 @@ import { Helmet } from 'react-helmet-async';
 
 
 
-export default function Landing({isDark, setIsDark}) {
+export default function Landing({ isDark, setIsDark }) {
     return (
         <div className='overflow-x-hidden '>
             <Helmet>
@@ -27,20 +27,37 @@ export default function Landing({isDark, setIsDark}) {
             </Helmet>
             <Navbar isDark={isDark} setIsDark={setIsDark} />
 
-            <main>           
-            <Hero />
-            <AchievementSlider/>
-            <Features />
-            <Gallery/>
-            <VisionMission />
-            <AboutUs/>
-            <FacultyPage/>
-            <FAQ/>
-            <ContactUs/>
+            <main>
+                <Hero />
+                <AchievementSlider />
+                <Features />
+                <Gallery />
+                <VisionMission />
+                <AboutUs />
+                <FacultyPage />
+                <FAQ />
+                <ContactUs />
             </main>
-        <Footer/>
+            <div className="flex justify-center gap-6 py-6 text-sm text-gray-500 dark:text-gray-400">
+
+                <Link
+                    to="/privacy-policy"
+                    className="hover:text-violet-500 transition"
+                >
+                    Privacy Policy
+                </Link>
+
+                <Link
+                    to="/terms-and-conditions"
+                    className="hover:text-violet-500 transition"
+                >
+                    Terms & Conditions
+                </Link>
+
+            </div>
+            <Footer />
         </div>
 
-)
+    )
 };
 
