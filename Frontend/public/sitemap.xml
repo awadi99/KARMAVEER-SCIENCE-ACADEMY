@@ -1,44 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  
-  <!-- Homepage -->
+
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+  xsi:schemaLocation="
+    http://www.sitemaps.org/schemas/sitemap/0.9
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+  "
+>
+
+  <!-- =========================
+       HOMEPAGE
+  ========================== -->
+
   <url>
-    <loc>https://karmaveerscienceacademy.in/</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+
+    <loc>
+      https://karmaveerscienceacademy.in/
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      weekly
+    </changefreq>
+
+    <priority>
+      1.0
+    </priority>
+
     <image:image>
-      <image:loc>https://karmaveerscienceacademy.in/favicon-512x512.png</image:loc>
-      <image:title>Karmaveer Science Academy - Best JEE | MHT-CET Coaching Baramati</image:title>
-      <image:caption>Karmaveer Science Academy Logo - Best Coaching in Baramati</image:caption>
+
+      <image:loc>
+        https://karmaveerscienceacademy.in/android-chrome-512x512.png
+      </image:loc>
+
+      <image:title>
+        Karmaveer Science Academy,Baramati - Best JEE | MHT-CET Coaching Baramati
+      </image:title>
+
+      <image:caption>
+        Karmaveer Science Academy Official Logo
+      </image:caption>
+
     </image:image>
+
   </url>
 
-  <!-- Login -->
+  <!-- =========================
+       LOGIN PAGE
+  ========================== -->
+
   <url>
-    <loc>https://karmaveerscienceacademy.in/login</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+
+    <loc>
+      https://karmaveerscienceacademy.in/login
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      yearly
+    </changefreq>
+
+    <priority>
+      0.3
+    </priority>
+
   </url>
 
-  <!-- Register -->
+  <!-- =========================
+       REGISTER PAGE
+  ========================== -->
+
   <url>
-    <loc>https://karmaveerscienceacademy.in/register</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+
+    <loc>
+      https://karmaveerscienceacademy.in/register
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      yearly
+    </changefreq>
+
+    <priority>
+      0.3
+    </priority>
+
   </url>
 
-  <!-- Forgot Password -->
+  <!-- =========================
+       FORGOT PASSWORD PAGE
+  ========================== -->
+
   <url>
-    <loc>https://karmaveerscienceacademy.in/forgot-password</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
+
+    <loc>
+      https://karmaveerscienceacademy.in/forgot-password
+    </loc>
+
+    <lastmod>
+      2026-05-23
+    </lastmod>
+
+    <changefreq>
+      yearly
+    </changefreq>
+
+    <priority>
+      0.2
+    </priority>
+
   </url>
 
 </urlset>
