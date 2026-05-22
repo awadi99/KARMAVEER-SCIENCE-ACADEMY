@@ -73,12 +73,7 @@ export default function Hero() {
                                 </span>
                             </Button>
 
-                            <button
-                                onClick={() => navigate('/courses')}
-                                className={`${optimizedStyles.buttonClass} bg-white dark:bg-[#1E293B] text-slate-800 dark:text-[#F1F5F9] border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-[#243347] w-full sm:w-auto uppercase tracking-wider`}
-                            >
-                                View Courses
-                            </button>
+                           
                         </div>
                     </div>
 
