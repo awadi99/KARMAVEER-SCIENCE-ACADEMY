@@ -5,7 +5,8 @@ import { ToastContainer, Flip } from 'react-toastify';
 import { useAuth } from './hook/useAuth.js';
 
 // Lazy Loading components
-
+import PrivacyPolicy from './page/PrivacyPolicy.jsx';
+import TermsConditions from './page/TermsConditions.jsx';
 import ForgotPassword from './page/ForgotPassword';
 const LandingPage = lazy(() => import('./page/LandingPage'));
 const Register = lazy(() => import('./page/Register'));
@@ -43,26 +44,35 @@ export default function App() {
   }
 
   return (
-    <div className="antialiased selection:bg-violet-500/30"> 
+    <div className="antialiased selection:bg-violet-500/30">
       <SmoothScroll>
         <ToastContainer position="top-center" autoClose={2000} theme="dark" transition={Flip} />
 
         <div className="min-h-screen bg-slate-50 dark:bg-[#020205] text-slate-900 dark:text-slate-100 transition-colors duration-300">
           <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-[#020205]">
-    <div className="w-8 h-8 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
-  </div>}>
+            <div className="w-8 h-8 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
+          </div>}>
             <Routes>
-              
+
               <Route path='/' element={<LandingPage isDark={isDark} setIsDark={setIsDark} />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/forgot-password' element={<ForgotPassword />} />
+              <Route
+                path="/privacy-policy"
+                element={<PrivacyPolicy />}
+              />
+
+              <Route
+                path="/terms-and-conditions"
+                element={<TermsConditions />}
+              />
 
               {/* ✅ ADD THIS ROUTE */}
               <Route path='/auth/google/success' element={<GoogleAuthSuccess />} />
 
               <Route path="/dashboard" element={<MainLayout isDark={isDark} setIsDark={setIsDark} />}>
-                
+
                 <Route index element={
                   isAdmin ? <Dashboard /> : <Navigate to="/dashboard/tests" replace />
                 } />
@@ -76,7 +86,7 @@ export default function App() {
                     <Route path="students" element={<Student />} />
                   </>
                 )}
-                
+
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
               </Route>
 
