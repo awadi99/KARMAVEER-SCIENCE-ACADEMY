@@ -26,7 +26,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      console.warn("Unauthorized request caught by interceptor.");
+      return Promise.reject(error);
     }
     return Promise.reject(error);
   }
