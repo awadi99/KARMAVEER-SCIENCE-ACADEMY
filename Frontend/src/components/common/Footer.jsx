@@ -16,6 +16,8 @@ const EXPLORE_LINKS = [
     { name: 'Terms & Conditions', path: '/terms-and-conditions' },
 ];
 
+
+
 export default function Footer() {
     return (
         /* Replaced sharp tech dark navy with premium academic Deep Slate Blue (#0F172A) & clean borders */
