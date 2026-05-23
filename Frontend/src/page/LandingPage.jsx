@@ -26,8 +26,6 @@ export default function Landing({ isDark, setIsDark }) {
                 <link rel="canonical" href="https://karmaveerscienceacademy.in/" />
             </Helmet>
             <Navbar isDark={isDark} setIsDark={setIsDark} />
-
-            
             <main>
                 <Hero />
                 <AchievementSlider />
