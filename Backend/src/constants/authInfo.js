@@ -10,6 +10,7 @@ export const authorizedUsers = [
   { erpId: "KSAA08", role: "admin" },
   { erpId: "KSAA09", role: "admin" },
   { erpId: "KSAA10", role: "admin" },
+  { erpId: "KSAA11", role: "admin" },
 
   // --- 11th STANDARD STUDENTS ---
   { erpId: "KSAS11TN26829", role: "student" }, { erpId: "KSAS11PR26417", role: "student" },
@@ -28,6 +29,7 @@ export const authorizedUsers = [
   { erpId: "KSAS11VR26485", role: "student" }, { erpId: "KSAS11SU26720", role: "student" },
   { erpId: "KSAS11UB26153", role: "student" }, { erpId: "KSAS11AS26896", role: "student" },
   { erpId: "KSAS11YR26344", role: "student" }, { erpId: "KSAS11DG26569", role: "student" },
+  { erpId: "KSAS11AW2699", role: "student" },
 
   // --- 12th STANDARD STUDENTS ---
   { erpId: "KSAS12SS26712", role: "student" }, { erpId: "KSAS12SS26485", role: "student" },
