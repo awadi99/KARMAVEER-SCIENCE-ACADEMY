@@ -21,7 +21,7 @@ export default function Landing({ isDark, setIsDark }) {
     return (
         <div className='overflow-x-hidden '>
             <Helmet>
-                <title>Karmaveer Science Academy | Best Coaching for 11th & 12th Science</title>
+                <title>Karmaveer Science Academy, Baramati | Best Coaching for 11th & 12th Science</title>
                 <meta name="description" content="Karmaveer Science Academy offers expert coaching for 11th, 12th Science and competitive exams." />
                 <link rel="canonical" href="https://karmaveerscienceacademy.in/" />
             </Helmet>
@@ -38,23 +38,6 @@ export default function Landing({ isDark, setIsDark }) {
                 <FAQ />
                 <ContactUs />
             </main>
-            <div className="flex justify-center gap-6 py-6 text-sm text-gray-500 dark:text-gray-400">
-
-                <Link
-                    to="/privacy-policy"
-                    className="hover:text-violet-500 transition"
-                >
-                    Privacy Policy
-                </Link>
-
-                <Link
-                    to="/terms-and-conditions"
-                    className="hover:text-violet-500 transition"
-                >
-                    Terms & Conditions
-                </Link>
-
-            </div>
             <Footer />
         </div>
 

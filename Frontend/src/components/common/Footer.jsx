@@ -12,8 +12,8 @@ const SOCIAL_LINKS = [
 
 const EXPLORE_LINKS = [
     { name: 'Home', path: '/' },
-    { name: 'Dashboard', path: '/register' },
-    { name: 'Test Series', path: '/register' },
+    { name: 'Privacy Policy', path: '/privacy-policy' },
+    { name: 'Terms & Conditions', path: '/terms-and-conditions' },
 ];
 
 export default function Footer() {

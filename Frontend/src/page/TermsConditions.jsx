@@ -1,200 +1,79 @@
 export default function TermsConditions() {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white to-slate-100 dark:from-[#020205] dark:to-[#0b0b12] text-black dark:text-white px-6 py-20">
-
-            <div className="max-w-5xl mx-auto">
-
-                {/* HEADER */}
-
-                <div className="text-center mb-16">
-
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-violet-600/10 border border-violet-500/20 mb-6 shadow-lg">
-
-                        <span className="text-4xl font-black text-violet-600">
-                            K
-                        </span>
-
-                    </div>
-
-                    <h1 className="text-5xl md:text-6xl font-black tracking-tight mb-6">
+        <div className="min-h-screen bg-slate-50 dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 px-4 sm:px-6 py-10 md:py-20">
+            <div className="max-w-4xl mx-auto">
+                
+                {/* HEADER - Professional Blue Theme */}
+                <div className="mb-10 sm:mb-16 border-l-4 border-blue-700 pl-4 sm:pl-6">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-3">
                         Terms & Conditions
                     </h1>
-
-                    <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                        Please read these Terms & Conditions carefully before
-                        using Karmaveer Science Academy services, website,
-                        online tests, and educational platform.
+                    <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400">
+                        Guidelines for using Karmaveer Science Academy services.
                     </p>
-
-                    <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-sm text-violet-600 dark:text-violet-300">
-
-                        <span className="w-2 h-2 rounded-full bg-violet-500"></span>
-
+                    <div className="mt-4 text-xs sm:text-sm font-medium text-blue-700 dark:text-blue-400">
                         Last Updated: May 23, 2026
-
                     </div>
-
                 </div>
 
-                {/* MAIN CARD */}
-
-                <div className="bg-white/80 dark:bg-white/5 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl p-8 md:p-14">
-
-                    {/* INTRO */}
-
-                    <section className="mb-14">
-
-                        <h2 className="text-3xl font-bold mb-5 text-violet-600 dark:text-violet-400">
-                            Acceptance of Terms
-                        </h2>
-
-                        <p className="text-lg leading-8 text-slate-700 dark:text-slate-300">
-                            By accessing or using Karmaveer Science Academy
-                            services, you agree to comply with these Terms
-                            & Conditions and all applicable laws and regulations.
+                {/* MAIN CONTENT CARD */}
+                <div className="bg-white dark:bg-[#1e293b] rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 sm:p-8 md:p-12">
+                    
+                    <section className="mb-10">
+                        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-slate-900 dark:text-white">Acceptance of Terms</h2>
+                        <p className="leading-7 sm:leading-8 text-sm sm:text-base text-slate-600 dark:text-slate-300">
+                            By accessing our website and educational platform, you agree to comply with 
+                            these Terms & Conditions. If you do not agree with any part of these terms, 
+                            please refrain from using our services.
                         </p>
-
                     </section>
 
-                    {/* WEBSITE USAGE */}
-
-                    <section className="mb-14">
-
-                        <h2 className="text-3xl font-bold mb-6 text-violet-600 dark:text-violet-400">
-                            Website Usage
-                        </h2>
-
-                        <div className="space-y-4">
-
+                    <section className="mb-10">
+                        <h2 className="text-xl sm:text-2xl font-bold mb-6 text-slate-900 dark:text-white">Website Usage</h2>
+                        <div className="space-y-3">
                             {[
-                                "This platform is intended only for educational purposes.",
-                                "Users must not misuse, hack, or attempt unauthorized access.",
-                                "Students must provide accurate registration details.",
-                                "Users are responsible for maintaining account confidentiality."
-                            ].map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="flex items-start gap-4 p-4 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10"
-                                >
-
-                                    <div className="w-7 h-7 rounded-full bg-violet-600 text-white flex items-center justify-center text-sm font-bold mt-1">
-                                        ✓
-                                    </div>
-
-                                    <p className="text-slate-700 dark:text-slate-300 text-lg">
-                                        {item}
-                                    </p>
-
+                                "This platform is intended exclusively for educational and coaching purposes.",
+                                "Users must not engage in hacking, data scraping, or unauthorized access.",
+                                "Providing accurate registration and contact information is mandatory.",
+                                "Account holders are solely responsible for their login credentials."
+                            ].map((text, i) => (
+                                <div key={i} className="flex gap-3 p-3 rounded-lg bg-slate-50 dark:bg-[#0f172a] border border-slate-100 dark:border-slate-700">
+                                    <span className="text-blue-600 font-bold">•</span>
+                                    <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300">{text}</p>
                                 </div>
                             ))}
-
                         </div>
-
                     </section>
 
-                    {/* STUDENT ACCOUNTS */}
-
-                    <section className="mb-14">
-
-                        <h2 className="text-3xl font-bold mb-5 text-violet-600 dark:text-violet-400">
-                            Student Accounts
-                        </h2>
-
-                        <p className="text-lg leading-8 text-slate-700 dark:text-slate-300">
-                            Students are responsible for maintaining the security
-                            of their accounts and login credentials. Sharing
-                            accounts with others is strictly prohibited.
+                    <section className="mb-10">
+                        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-slate-900 dark:text-white">Student Account Policy</h2>
+                        <p className="leading-7 sm:leading-8 text-sm sm:text-base text-slate-600 dark:text-slate-300">
+                            Each student account is meant for individual use. Sharing account credentials 
+                            with others is strictly prohibited and may result in permanent suspension 
+                            without prior notice.
                         </p>
-
                     </section>
 
-                    {/* STUDY MATERIALS */}
-
-                    <section className="mb-14">
-
-                        <h2 className="text-3xl font-bold mb-5 text-violet-600 dark:text-violet-400">
-                            Study Materials & Tests
-                        </h2>
-
-                        <p className="text-lg leading-8 text-slate-700 dark:text-slate-300">
-                            All study materials, notes, online tests, videos,
-                            and educational content belong to Karmaveer Science Academy
-                            and may not be copied, distributed, or reused without permission.
+                    <section className="mb-10">
+                        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-slate-900 dark:text-white">Intellectual Property</h2>
+                        <p className="leading-7 sm:leading-8 text-sm sm:text-base text-slate-600 dark:text-slate-300">
+                            All study materials, mock tests, videos, and platform content are the 
+                            exclusive property of Karmaveer Science Academy. Any unauthorized 
+                            distribution or reproduction is a violation of our terms.
                         </p>
-
                     </section>
 
-                    {/* LIMITATION */}
-
-                    <section className="mb-14">
-
-                        <h2 className="text-3xl font-bold mb-5 text-violet-600 dark:text-violet-400">
-                            Limitation of Liability
-                        </h2>
-
-                        <p className="text-lg leading-8 text-slate-700 dark:text-slate-300">
-                            Karmaveer Science Academy is not responsible for
-                            internet interruptions, technical failures,
-                            temporary downtime, or data loss caused by
-                            third-party services.
-                        </p>
-
-                    </section>
-
-                    {/* POLICY CHANGES */}
-
-                    <section className="mb-14">
-
-                        <h2 className="text-3xl font-bold mb-5 text-violet-600 dark:text-violet-400">
-                            Changes to Terms
-                        </h2>
-
-                        <p className="text-lg leading-8 text-slate-700 dark:text-slate-300">
-                            We may update these Terms & Conditions at any time.
-                            Continued use of the platform after updates
-                            means you accept the revised terms.
-                        </p>
-
-                    </section>
-
-                    {/* CONTACT */}
-
-                    <section>
-
-                        <h2 className="text-3xl font-bold mb-6 text-violet-600 dark:text-violet-400">
-                            Contact Information
-                        </h2>
-
-                        <div className="p-8 rounded-3xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-xl">
-
-                            <h3 className="text-2xl font-bold mb-4">
-                                Karmaveer Science Academy
-                            </h3>
-
-                            <div className="space-y-3 text-lg">
-
-                                <p>
-                                    📍 Suryanagari, Baramati, Maharashtra 413102
-                                </p>
-
-                                <p>
-                                    📧 info@karmaveerscienceacademy.in
-                                </p>
-
-                                <p>
-                                    📞 +91 9763120121
-                                </p>
-
-                            </div>
-
+                    {/* CONTACT BOX - Modern & Mobile Friendly */}
+                    <div className="mt-8 p-6 sm:p-8 rounded-xl bg-slate-100 dark:bg-[#0f172a] border-l-4 border-blue-600">
+                        <h3 className="text-lg sm:text-xl font-bold mb-4 text-slate-900 dark:text-white">Questions?</h3>
+                        <div className="flex flex-col gap-3 text-slate-700 dark:text-slate-300 text-xs sm:text-sm">
+                            <p>📍 Suryanagari, Baramati, 413102</p>
+                            <p>📧 info@karmaveerscienceacademy.in</p>
+                            <p>📞 +91 9763120121</p>
                         </div>
-
-                    </section>
-
+                    </div>
                 </div>
-
             </div>
-
         </div>
     );
 }
