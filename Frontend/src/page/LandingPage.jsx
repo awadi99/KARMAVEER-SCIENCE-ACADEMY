@@ -27,6 +27,7 @@ export default function Landing({ isDark, setIsDark }) {
             </Helmet>
             <Navbar isDark={isDark} setIsDark={setIsDark} />
 
+            
             <main>
                 <Hero />
                 <AchievementSlider />
