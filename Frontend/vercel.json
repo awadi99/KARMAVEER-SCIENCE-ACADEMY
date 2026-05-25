@@ -1,8 +1,16 @@
 {
-    "rewrites": [
-      {
-        "source": "/(.*)",
-        "destination": "/index.html"
-      }
-    ]
-  }
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+
+  "redirects": [
+    {
+      "source": "https://karmaveerscienceacademy.in/(.*)",
+      "destination": "https://www.karmaveerscienceacademy.in/$1",
+      "permanent": true
+    }
+  ]
+}
