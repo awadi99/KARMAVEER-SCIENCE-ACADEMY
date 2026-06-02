@@ -90,7 +90,7 @@ export default function Footer() {
                             <li>
                                 <a href="mailto:adityawaghmare@gmail.com" className="flex items-center justify-start gap-4 text-slate-400 hover:text-white transition-all group truncate block transform-gpu">
                                     <Mail size={18} className="text-slate-500 shrink-0 group-hover:-translate-y-1 transition-transform" />
-                                    <span className="truncate">adityawaghmare@gmail.com</span>
+                                    <span className="truncate">adityawaghmare9990@gmail.com</span>
                                 </a>
                             </li>
                         </ul>
