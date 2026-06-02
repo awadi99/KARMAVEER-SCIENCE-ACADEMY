@@ -79,7 +79,7 @@ export default function Footer() {
                         <ul className="space-y-5 text-sm font-bold">
                             <li className="flex items-start justify-start gap-4 text-slate-400">
                                 <MapPin size={20} className="text-slate-500 shrink-0 mt-0.5" />
-                                <span className="leading-snug">Main Campus, Baramati,<br />Maharashtra 413102</span>
+                                <span className="leading-snug">Satav Chowk, Baramati,<br />Maharashtra 413102</span>
                             </li>
                             <li>
                                 <a href="tel:+919673298788" className="flex items-center justify-start gap-4 text-slate-400 hover:text-white transition-all group transform-gpu">
