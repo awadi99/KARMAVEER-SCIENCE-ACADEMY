@@ -10,7 +10,7 @@ const authSchema = new mongoose.Schema(
             trim: true,
             index: true,
             minLength: 3,
-            maxLength: 30,
+            maxLength: 20,
         },
         fullName: {
             type: String,
