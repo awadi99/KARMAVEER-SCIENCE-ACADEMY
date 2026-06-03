@@ -8,7 +8,7 @@ const passwordRegex =
 export const signupSchema = Joi.object({
     erpId:Joi.string()
     .min(3)
-    .max(10)
+    .max(20)
     .required()
     .messages({
         "string.empty":"erpId required",
